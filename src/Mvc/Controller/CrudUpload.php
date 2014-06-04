@@ -13,7 +13,7 @@
  */
 namespace Vegas\Mvc\Controller;
 
-class CrudWithUpload extends Crud
+class CrudUpload extends Crud
 {
     /**
      * @ACL(name="upload", inherit='edit')

@@ -1,7 +1,7 @@
 <?php
 namespace Vegas\Media\Model;
 
-use \Vegas\Mvc\CollectionAbstract;
+use Vegas\Db\Decorator\CollectionAbstract;
 
 class File extends CollectionAbstract
 {
