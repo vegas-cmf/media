@@ -24,7 +24,8 @@
         "ext-phalcon": ">=1.3.0,<2",
         "phalcon/devtools": "1.3.x-dev",
         "phalcon/incubator": "dev-master",
-        "vegas-cmf/core" : "dev-master"
+        "vegas-cmf/core" : "dev-master",
+        "spekkionu/wideimage" : "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "4.0.*"
