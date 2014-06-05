@@ -38,7 +38,7 @@ class Helper
      * @throws CannotSaveFileInHardDriveException
      * @throws \Exception
      */
-    public static final function moveFilesFrom(\Vegas\Mvc\CollectionAbstract $record)
+    public static final function moveFilesFrom(\Vegas\Db\Decorator\CollectionAbstract $record)
     {
         if(isset($record->files)) {
             foreach($record->files as $file) {
@@ -85,7 +85,7 @@ class Helper
      * @param array $size
      * @throws File\Exception
      */
-    public static final function generateThumbnailsFrom(\Vegas\Mvc\CollectionAbstract $record, array $size)
+    public static final function generateThumbnailsFrom(\Vegas\Db\Decorator\CollectionAbstract $record, array $size)
     {
         if(isset($record->files)) {
             foreach($record->files as $file) {
