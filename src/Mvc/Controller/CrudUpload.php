@@ -23,7 +23,7 @@ class CrudUpload extends Crud
     public function uploadAction()
     {
         if (!$this->di->has('uploader')) {
-            throw new UploaderNotSetException;
+            throw new UploaderNotSetException();
         }
 
         $this->view->disable();
