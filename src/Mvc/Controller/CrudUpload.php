@@ -13,6 +13,8 @@
  */
 namespace Vegas\Mvc\Controller;
 
+use Vegas\Mvc\Controller\Crud\Exception\UploaderNotSetException;
+
 class CrudUpload extends Crud
 {
     /**
@@ -20,6 +22,10 @@ class CrudUpload extends Crud
      */
     public function uploadAction()
     {
+        if (!$this->di->has('uploader')) {
+            throw new UploaderNotSetException;
+        }
+
         $this->view->disable();
         $this->dispatcher->getEventsManager()->fire(Crud\Events::BEFORE_UPLOAD, $this);
 
