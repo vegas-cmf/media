@@ -71,6 +71,9 @@ class File implements MappingInterface
 
         $decoratedFiles = new \ArrayObject();
         foreach ($files as $file) {
+            if (!$file instanceof \Vegas\Media\Model\File) {
+                continue;
+            }
             $decoratedFiles->append(new Decorator($file));
         }
         $value = $decoratedFiles;

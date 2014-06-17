@@ -78,6 +78,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/origin/temp.jpg', $foo->readMapped('image')[0]->getPath());
         $this->assertEquals('/origin/temp.jpg', $foo->readMapped('image')[0]->getUrl());
         $this->assertInstanceOf('\SplFileInfo', $foo->readMapped('image')[0]->getFileInfo());
+        $this->assertEquals('/origin/thumbnails/100_100_temp.jpg', $foo->readMapped('image')[0]->getThumbnailUrl(100,100));
+        $this->assertEquals('/origin/thumbnails/100_100_temp.jpg', $foo->readMapped('image')[0]->getThumbnailPath(100,100));
+        $this->assertTrue($foo->readMapped('image')[0]->delete());
+        $this->assertCount(0, $foo->readMapped('image'));
     }
 
 } 
