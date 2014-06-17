@@ -48,7 +48,7 @@ class Decorator
         $paths = array();
         $paths[] = $this->getFileDirectoryPath();
         $paths[] = $this->record->temp_name;
-        
+
         return DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $paths);
     }
 
