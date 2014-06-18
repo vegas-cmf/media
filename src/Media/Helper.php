@@ -40,20 +40,18 @@ class Helper
     public static final function moveFilesFrom(\Vegas\Media\Db\Mapping\File $files)
     {
         foreach($files as $file) {
-            self::moveFile($file);
+            self::moveFile($file->getRecord());
         }
     }
 
     /**
      * Move file from the temporary destination to the original destination
      *
-     * @param File\Decorator $file
+     * @param FileModel $file
      * @throws File\Exception
      */
-    public static final function moveFile(\Vegas\Media\File\Decorator $file)
+    public static final function moveFile(\Vegas\Media\Model\File $file)
     {
-        $file = $file->getRecord();
-
         try {
             if($file->is_temp) {
                 rename(
@@ -83,7 +81,7 @@ class Helper
     public static final function generateThumbnailsFrom(\Vegas\Media\Db\Mapping\File $files, array $size)
     {
         foreach($files as $file) {
-            self::generateThumbnail($file, $size);
+            self::generateThumbnail($file->getRecord(), $size);
         }
     }
 
@@ -91,13 +89,11 @@ class Helper
      * Generates a thumbnails of the images in the following location:
      * {ORIGINAL_DESTINATION_OF_THE_FILE}/thumbnails/filename.{ext}
      *
-     * @param File\Decorator $file
+     * @param FileModel $file
      * @param array $size
      */
-    public static final function generateThumbnail(\Vegas\Media\File\Decorator $file, array $size = array('width' => 168, 'height' => 120))
+    public static final function generateThumbnail(\Vegas\Media\Model\File $file, array $size = array('width' => 168, 'height' => 120))
     {
-        $file = $file->getRecord();
-
         if(!empty($file->original_destination) && isset($size['width']) && isset($size['height'])) {
 
             // ie. string(47) "/var/www/vegas/public/uploads/5326acd311dd4.jpg"
