@@ -47,7 +47,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     protected function mockFooRecord(File $file)
     {
         $foo = new Foo();
-        $foo->image = array((string)$file->getId());
+        $foo->image = array(array('file_id' => (string)$file->getId()));
         $foo->width = 800;
         $foo->height = 700;
         $foo->title = 'Lorem ipsum';
