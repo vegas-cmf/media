@@ -27,9 +27,12 @@ class Decorator
         $this->extraData = $extraData;
     }
 
-    public function getName()
+    /**
+     * @return \Vegas\Media\Model\File
+     */
+    public function getRecord()
     {
-        return $this->record->name;
+        return $this->record;
     }
 
     /**

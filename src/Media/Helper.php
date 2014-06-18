@@ -10,6 +10,7 @@
  * file that was distributed with this source code.
  */
 namespace Vegas\Media;
+namespace Vegas\Media;
 
 use Vegas\Media\Model\File as FileModel;
 use Vegas\Media\File\Exception as FileException;
@@ -34,44 +35,39 @@ class Helper
      *          "updated_at": NumberInt(1394171751)
      *      }
      *
-     * @param \Vegas\Mvc\CollectionAbstract $record
-     * @throws CannotSaveFileInHardDriveException
-     * @throws \Exception
+     * @param Db\Mapping\File $files
      */
-    public static final function moveFilesFrom(\Vegas\Db\Decorator\CollectionAbstract $record)
+    public static final function moveFilesFrom(\Vegas\Media\Db\Mapping\File $files)
     {
-        if(isset($record->files)) {
-            foreach($record->files as $file) {
-                self::moveFile(FileModel::findById($file['file_id']));
-            }
-        } else {
-            throw new FileException();
+        foreach($files as $file) {
+            self::moveFile($file);
         }
     }
 
     /**
      * Move file from the temporary destination to the original destination
      *
-     * @param FileModel $fileModel
-     * @throws CannotSaveFileInHardDriveException
-     * @throws \Exception
+     * @param File\Decorator $file
+     * @throws File\Exception
      */
-    public static final function moveFile(\Vegas\Media\Model\File $fileModel)
+    public static final function moveFile(\Vegas\Media\File\Decorator $file)
     {
+        $file = $file->getRecord();
+
         try {
-            if($fileModel->is_temp) {
+            if($file->is_temp) {
                 rename(
-                    $fileModel->temp_destination . '/' . $fileModel->temp_name,
-                    $fileModel->original_destination . '/' . $fileModel->temp_name
+                    $file->temp_destination . '/' . $file->temp_name,
+                    $file->original_destination . '/' . $file->temp_name
                 );
 
-                if(!file_exists($fileModel->original_destination . '/' . $fileModel->temp_name)) {
+                if(!file_exists($file->original_destination . '/' . $file->temp_name)) {
                     throw new CannotSaveFileInHardDriveException();
                 }
 
-                $fileModel->is_temp = false;
-                $fileModel->expire = null;
-                $fileModel->save();
+                $file->is_temp = false;
+                $file->expire = null;
+                $file->save();
             }
         } catch (\Exception $exception) {
             throw new FileException($exception->getMessage());
@@ -81,18 +77,13 @@ class Helper
     /**
      * Generates a thumbnails of the files associated with the record
      *
-     * @param \Vegas\Mvc\CollectionAbstract $record
+     * @param Db\Mapping\File $files
      * @param array $size
-     * @throws File\Exception
      */
-    public static final function generateThumbnailsFrom(\Vegas\Db\Decorator\CollectionAbstract $record, array $size)
+    public static final function generateThumbnailsFrom(\Vegas\Media\Db\Mapping\File $files, array $size)
     {
-        if(isset($record->files)) {
-            foreach($record->files as $file) {
-                self::generateThumbnail(FileModel::findById($file['file_id']), $size);
-            }
-        } else {
-            throw new FileException();
+        foreach($files as $file) {
+            self::generateThumbnail($file, $size);
         }
     }
 
@@ -100,24 +91,26 @@ class Helper
      * Generates a thumbnails of the images in the following location:
      * {ORIGINAL_DESTINATION_OF_THE_FILE}/thumbnails/filename.{ext}
      *
-     * @param FileModel $fileModel
+     * @param File\Decorator $file
      * @param array $size
      */
-    public static final function generateThumbnail(\Vegas\Media\Model\File $fileModel, array $size = array('width' => 168, 'height' => 120))
+    public static final function generateThumbnail(\Vegas\Media\File\Decorator $file, array $size = array('width' => 168, 'height' => 120))
     {
-        if(!empty($fileModel->original_destination) && isset($size['width']) && isset($size['height'])) {
+        $file = $file->getRecord();
+
+        if(!empty($file->original_destination) && isset($size['width']) && isset($size['height'])) {
 
             // ie. string(47) "/var/www/vegas/public/uploads/5326acd311dd4.jpg"
-            $file = $fileModel->original_destination . '/' . $fileModel->temp_name;
+            $filePath = $file->original_destination . '/' . $file->temp_name;
 
-            if (!file_exists($fileModel->original_destination . '/thumbnails')) {
-                mkdir($fileModel->original_destination . '/thumbnails', 0777, true);
+            if (!file_exists($file->original_destination . '/thumbnails')) {
+                mkdir($file->original_destination . '/thumbnails', 0777, true);
             }
 
-            WideImage::load($file)
+            WideImage::load($filePath)
                 ->resize($size['width'], $size['height'], 'outside')
                 ->crop('center', 'middle', $size['width'], $size['height'])
-                ->saveToFile($fileModel->original_destination . '/thumbnails/' . $size['width'] . '_' . $size['height'] . '_' . $fileModel->temp_name);
+                ->saveToFile($file->original_destination . '/thumbnails/' . $size['width'] . '_' . $size['height'] . '_' . $file->temp_name);
         }
     }
 }

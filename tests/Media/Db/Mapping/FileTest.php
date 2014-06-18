@@ -74,7 +74,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $foo->readMapped('image')->getArrayCopy());
         $this->assertInstanceOf('\Vegas\Media\File\Decorator', $foo->readMapped('image')[0]);
         $this->assertInstanceOf('\Vegas\Media\File\Decorator', $foo->readMapped('image')->offsetGet(0));
-        $this->assertEquals('origin.jpg', $foo->readMapped('image')[0]->getName());
+        $this->assertEquals('origin.jpg', $foo->readMapped('image')[0]->getRecord()->name);
+        $this->assertTrue($foo->readMapped('image')[0]->save());
+        $this->assertEquals($file->getId(), $foo->readMapped('image')[0]->getRecord()->getId());
         $this->assertEquals('/origin/temp.jpg', $foo->readMapped('image')[0]->getPath());
         $this->assertEquals('/origin/temp.jpg', $foo->readMapped('image')[0]->getUrl());
         $this->assertInstanceOf('\SplFileInfo', $foo->readMapped('image')[0]->getFileInfo());
