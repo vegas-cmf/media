@@ -63,10 +63,10 @@ class File implements MappingInterface
         $files = array();
         if (is_array($value)) {
             foreach ($value as $file) {
-                $files[] = \Vegas\Media\Model\File::findById($file);
+                $files[] = \Vegas\Media\Model\File::findById($file['file_id']);
             }
         } else {
-            $files[] = \Vegas\Media\Model\File::findById($value);
+            $files[] = \Vegas\Media\Model\File::findById($value['file_id']);
         }
 
         $decoratedFiles = new \ArrayObject();

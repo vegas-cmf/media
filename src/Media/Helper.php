@@ -35,9 +35,9 @@ class Helper
      *          "updated_at": NumberInt(1394171751)
      *      }
      *
-     * @param Db\Mapping\File $files
+     * @param array $files
      */
-    public static final function moveFilesFrom(\Vegas\Media\Db\Mapping\File $files)
+    public static final function moveFilesFrom(array $files)
     {
         foreach($files as $file) {
             self::moveFile($file->getRecord());
@@ -75,10 +75,10 @@ class Helper
     /**
      * Generates a thumbnails of the files associated with the record
      *
-     * @param Db\Mapping\File $files
+     * @param array $files
      * @param array $size
      */
-    public static final function generateThumbnailsFrom(\Vegas\Media\Db\Mapping\File $files, array $size)
+    public static final function generateThumbnailsFrom(array $files, array $size)
     {
         foreach($files as $file) {
             self::generateThumbnail($file->getRecord(), $size);
