@@ -75,10 +75,10 @@ class Helper
     /**
      * Generates a thumbnails of the files associated with the record
      *
-     * @param Db\Mapping\File $files
+     * @param array $files
      * @param array $size
      */
-    public static final function generateThumbnailsFrom(\Vegas\Media\Db\Mapping\File $files, array $size)
+    public static final function generateThumbnailsFrom(array $files, array $size)
     {
         foreach($files as $file) {
             self::generateThumbnail($file->getRecord(), $size);
