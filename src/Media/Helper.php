@@ -35,9 +35,9 @@ class Helper
      *          "updated_at": NumberInt(1394171751)
      *      }
      *
-     * @param Db\Mapping\File $files
+     * @param array $files
      */
-    public static final function moveFilesFrom(\Vegas\Media\Db\Mapping\File $files)
+    public static final function moveFilesFrom(array $files)
     {
         foreach($files as $file) {
             self::moveFile($file->getRecord());
