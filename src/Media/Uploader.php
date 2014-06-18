@@ -365,12 +365,38 @@ class Uploader
      */
     private function hasAllowedMimeType($file)
     {
-        $mimeType = mime_content_type($file->getTempName());
+        if (function_exists('mime_content_type')) {
+            $mimeType = mime_content_type($file->getTempName());
+        } else {
+            $mimeType = $this->fileMimeContentType($file->getTempName());
+        }
 
         if(empty($this->mimeTypes) || in_array($mimeType, $this->mimeTypes)) {
             return true;
         }
-        
+
         return false;
+    }
+
+    private function fileMimeContentType($filename)
+    {
+        // Sanity check
+        if (!file_exists($filename)) {
+            return false;
+        }
+
+        $filename = escapeshellarg($filename);
+        $out = `file -iL $filename 2>/dev/null`;
+        if (empty($out)) {
+            return 'application/octet-stream';
+        }
+        // Strip off filename
+        $t = substr($out, strpos($out, ':') + 2);
+        if (strpos($t, ';') !== false) {
+            // Strip MIME parameters
+            $t = substr($t, 0, strpos($t, ';'));
+        }
+        // Strip any remaining whitespace
+        return trim($t);
     }
 }
