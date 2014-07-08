@@ -63,16 +63,7 @@ class File implements MappingInterface
     {
         $files = array();
         if (is_array($value)) {
-            foreach ($value as $key => $file) {
-                if (!empty($file['file_id'])) {
-                    $files[] = \Vegas\Media\Model\File::findById($file['file_id']);
-                } elseif ($key === 'file_id') {
-                    $files[] = \Vegas\Media\Model\File::findById($value['file_id']);
-                    break;
-                }
-            }
-        } else {
-            throw new Exception('Unable to resolve field value as array of files.');
+            $files = $this->resolveArray($value);
         }
 
         $decoratedFiles = new \ArrayObject();
@@ -85,5 +76,22 @@ class File implements MappingInterface
         $value = $decoratedFiles;
 
         return $value;
+    }
+
+    private function resolveArray(array $value)
+    {
+        $files = array();
+
+        if (!empty($value['file_id'])) {
+            $files[] = \Vegas\Media\Model\File::findById($value['file_id']);
+        } else {
+            foreach ($value as $file) {
+                if (!empty($file['file_id'])) {
+                    $files[] = \Vegas\Media\Model\File::findById($file['file_id']);
+                }
+            }
+        }
+
+        return $files;
     }
 }
