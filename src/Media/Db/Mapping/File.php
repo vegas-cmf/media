@@ -62,12 +62,15 @@ class File implements MappingInterface
     public function resolve(& $value)
     {
         $files = array();
-        if (is_array($value) && is_array(reset($value))) {
-            foreach ($value as $file) {
-                $files[] = \Vegas\Media\Model\File::findById($file['file_id']);
+        if (is_array($value)) {
+            foreach ($value as $key => $file) {
+                if (!empty($file['file_id'])) {
+                    $files[] = \Vegas\Media\Model\File::findById($file['file_id']);
+                } elseif ($key === 'file_id') {
+                    $files[] = \Vegas\Media\Model\File::findById($value['file_id']);
+                    break;
+                }
             }
-        } elseif (is_array($value)) {
-            $files[] = \Vegas\Media\Model\File::findById($value['file_id']);
         } else {
             throw new Exception('Unable to resolve field value as array of files.');
         }
