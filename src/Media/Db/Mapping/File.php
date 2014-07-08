@@ -14,6 +14,7 @@ namespace Vegas\Media\Db\Mapping;
 
 use Vegas\Db\MappingInterface;
 use Vegas\Media\File\Decorator;
+use Vegas\Media\File\Exception;
 
 /**
  * Class File
@@ -61,12 +62,14 @@ class File implements MappingInterface
     public function resolve(& $value)
     {
         $files = array();
-        if (is_array($value)) {
+        if (is_array($value) && is_array(reset($value))) {
             foreach ($value as $file) {
                 $files[] = \Vegas\Media\Model\File::findById($file['file_id']);
             }
-        } else {
+        } elseif (is_array($value)) {
             $files[] = \Vegas\Media\Model\File::findById($value['file_id']);
+        } else {
+            throw new Exception('Unable to resolve field value as array of files.');
         }
 
         $decoratedFiles = new \ArrayObject();
