@@ -14,8 +14,9 @@ namespace Vegas\Db\Mapping;
 
 use Vegas\Db\Decorator\CollectionAbstract;
 use Vegas\Db\MappingManager;
+use Vegas\Media\Db\FileInterface;
 
-class File extends CollectionAbstract
+class File extends CollectionAbstract implements FileInterface
 {
     public function getSource()
     {

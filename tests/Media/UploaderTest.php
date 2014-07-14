@@ -13,9 +13,10 @@
 namespace VegasTest;
 
 use Vegas\Db\Decorator\CollectionAbstract;
+use Vegas\Media\Db\FileInterface;
 use Vegas\Media\Uploader;
 
-class File extends CollectionAbstract
+class File extends CollectionAbstract implements FileInterface
 {
     public function getSource()
     {

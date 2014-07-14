@@ -13,6 +13,7 @@
 namespace Vegas\Media\Db\Mapping;
 
 use Vegas\Db\MappingInterface;
+use Vegas\Media\Db\FileInterface;
 use Vegas\Media\File\Decorator;
 use Vegas\Media\File\Exception;
 
@@ -51,19 +52,19 @@ class File implements MappingInterface
     /**
      * Class represents model
      *
-     * @var
+     * @var FileInterface
      */
-    private $modelClass;
+    private $fileModel;
 
     /**
      * Constructor
      * Sets model
      *
-     * @param $modelClass
+     * @param FileInterface $fileModel
      */
-    public function __construct($modelClass)
+    public function __construct(FileInterface $fileModel)
     {
-        $this->modelClass = $modelClass;
+        $this->fileModel = $fileModel;
     }
 
     /**
@@ -86,7 +87,7 @@ class File implements MappingInterface
 
         $decoratedFiles = new \ArrayObject();
         foreach ($files as $file) {
-            if (!$file instanceof $this->modelClass) {
+            if (!$file instanceof $this->fileModel) {
                 continue;
             }
             $decoratedFiles->append(new Decorator($file));
@@ -105,11 +106,11 @@ class File implements MappingInterface
         $files = array();
 
         if (!empty($value['file_id'])) {
-            $files[] = call_user_func(array($this->modelClass, 'findById'), $value['file_id']);
+            $files[] = call_user_func(array($this->fileModel, 'findById'), $value['file_id']);
         } else {
             foreach ($value as $file) {
                 if (!empty($file['file_id'])) {
-                    $files[] = call_user_func(array($this->modelClass, 'findById'), $file['file_id']);
+                    $files[] = call_user_func(array($this->fileModel, 'findById'), $file['file_id']);
                 }
             }
         }

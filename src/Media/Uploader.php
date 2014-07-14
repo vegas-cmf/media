@@ -34,7 +34,6 @@ namespace Vegas\Media;
 use Vegas\Media\Db\FileInterface;
 use Vegas\Media\Uploader\Exception\InvalidUploadedFileMimeTypeException;
 use \Vegas\Utils\Path;
-use \Vegas\Media\Model\File;
 use \Vegas\Media\Uploader\Exception\NoFilesException;
 use \Vegas\Media\Uploader\Exception\InvalidMaxSizeException;
 use \Vegas\Media\Uploader\Exception\CannotSaveFileInDatabaseException;
@@ -104,22 +103,22 @@ class Uploader
     /**
      * Class represents model
      *
-     * @var
+     * @var FileInterface
      */
-    private $modelClass;
+    private $fileModel;
 
     /**
      * Constructor
      * Sets model class
      *
-     * @param $modelClass
+     * @param FileInterface $fileModel
      */
-    public function __construct($modelClass)
+    public function __construct(FileInterface $fileModel)
     {
         $this->tempDestination = Path::getRootPath() . self::DEFAULT_TEMPORARY_DESTINATION;
         $this->originalDestination = Path::getRootPath() . self::DEFAULT_ORIGINAL_DESTINATION;
         $this->maxSize = $this->filterMaxSize(self::DEFAULT_MAX_SIZE);
-        $this->modelClass = $modelClass;
+        $this->fileModel = $fileModel;
     }
     
     /**
@@ -320,7 +319,7 @@ class Uploader
     {
         $expire = date('Y-m-d H:i:s') . ' + 2 hours';
 
-        $model = new $this->modelClass;
+        $model = new $this->fileModel;
         $model->name = $file->getName();
         $model->expire = strtotime($expire);
         $model->is_temp = true;
