@@ -31,6 +31,7 @@
 
 namespace Vegas\Media;
 
+use Vegas\Media\Db\FileInterface;
 use Vegas\Media\Uploader\Exception\InvalidUploadedFileMimeTypeException;
 use \Vegas\Utils\Path;
 use \Vegas\Media\Model\File;
@@ -255,7 +256,7 @@ class Uploader
             $model = $this->saveUploadedFile($file, $tempName);
 
             $resultFiles[] = array(
-                'file_id' => (string) $model->_id
+                'file_id' => (string) $model->getId()
             );
         }
 
@@ -312,7 +313,7 @@ class Uploader
      *
      * @param \Phalcon\Http\Request\FileInterface $file
      * @param $tempName
-     * @return File
+     * @return FileInterface
      * @throws Uploader\Exception\CannotSaveFileInDatabaseException
      */
     private function saveUploadedFile(\Phalcon\Http\Request\FileInterface $file, $tempName)
@@ -326,8 +327,6 @@ class Uploader
         $model->temp_name = $tempName;
         $model->temp_destination = $this->tempDestination;
         $model->original_destination = $this->originalDestination;
-        $model->save();
-
         if($model->save() == false) {
             throw new CannotSaveFileInDatabaseException();
         }

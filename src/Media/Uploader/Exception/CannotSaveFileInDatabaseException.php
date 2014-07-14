@@ -16,5 +16,5 @@ use Vegas\Media\Uploader\Exception as VegasMediaUploaderException;
 
 class CannotSaveFileInDatabaseException extends VegasMediaUploaderException
 {
-    protected $message = 'System cannot save file in the mongo database';
+    protected $message = 'System cannot save file in the database';
 }
