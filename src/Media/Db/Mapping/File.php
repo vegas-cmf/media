@@ -49,6 +49,24 @@ use Vegas\Media\File\Exception;
 class File implements MappingInterface
 {
     /**
+     * Class represents model
+     *
+     * @var
+     */
+    private $modelClass;
+
+    /**
+     * Constructor
+     * Sets model
+     *
+     * @param $modelClass
+     */
+    public function __construct($modelClass)
+    {
+        $this->modelClass = $modelClass;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getName()
@@ -68,7 +86,7 @@ class File implements MappingInterface
 
         $decoratedFiles = new \ArrayObject();
         foreach ($files as $file) {
-            if (!$file instanceof \Vegas\Media\Model\File) {
+            if (!$file instanceof $this->modelClass) {
                 continue;
             }
             $decoratedFiles->append(new Decorator($file));
@@ -78,16 +96,20 @@ class File implements MappingInterface
         return $value;
     }
 
+    /**
+     * @param array $value
+     * @return array
+     */
     private function resolveArray(array $value)
     {
         $files = array();
 
         if (!empty($value['file_id'])) {
-            $files[] = \Vegas\Media\Model\File::findById($value['file_id']);
+            $files[] = call_user_func(array($this->modelClass, 'findById'), $value['file_id']);
         } else {
             foreach ($value as $file) {
                 if (!empty($file['file_id'])) {
-                    $files[] = \Vegas\Media\Model\File::findById($file['file_id']);
+                    $files[] = call_user_func(array($this->modelClass, 'findById'), $file['file_id']);
                 }
             }
         }

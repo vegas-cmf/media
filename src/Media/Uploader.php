@@ -100,11 +100,25 @@ class Uploader
      */
     private $tempDestination = null;
 
-    public function __construct()
+    /**
+     * Class represents model
+     *
+     * @var
+     */
+    private $modelClass;
+
+    /**
+     * Constructor
+     * Sets model class
+     *
+     * @param $modelClass
+     */
+    public function __construct($modelClass)
     {
         $this->tempDestination = Path::getRootPath() . self::DEFAULT_TEMPORARY_DESTINATION;
         $this->originalDestination = Path::getRootPath() . self::DEFAULT_ORIGINAL_DESTINATION;
         $this->maxSize = $this->filterMaxSize(self::DEFAULT_MAX_SIZE);
+        $this->modelClass = $modelClass;
     }
     
     /**
@@ -237,9 +251,7 @@ class Uploader
         foreach($this->files as $file) {
 
             $this->validateFile($file);
-
             $tempName = $this->moveUploadedFileToTempDestination($file);
-
             $model = $this->saveUploadedFile($file, $tempName);
 
             $resultFiles[] = array(
@@ -307,7 +319,7 @@ class Uploader
     {
         $expire = date('Y-m-d H:i:s') . ' + 2 hours';
 
-        $model = new File();
+        $model = new $this->modelClass;
         $model->name = $file->getName();
         $model->expire = strtotime($expire);
         $model->is_temp = true;
@@ -378,6 +390,12 @@ class Uploader
         return false;
     }
 
+    /**
+     * Returns file mime type
+     *
+     * @param $filename
+     * @return bool|string
+     */
     private function fileMimeContentType($filename)
     {
         // Sanity check

@@ -1,5 +1,5 @@
 <?php
-/**
+/**1
  * This file is part of Vegas package
  *
  * @author Adrian Malik <adrian.malik.89@gmail.com>
@@ -9,7 +9,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Vegas\Media;
+
 namespace Vegas\Media;
 
 use Vegas\Media\Model\File as FileModel;
@@ -50,7 +50,7 @@ class Helper
      * @param FileModel $file
      * @throws File\Exception
      */
-    public static final function moveFile(\Vegas\Media\Model\File $file)
+    public static final function moveFile($file)
     {
         try {
             if($file->is_temp) {
@@ -92,7 +92,7 @@ class Helper
      * @param FileModel $file
      * @param array $size
      */
-    public static final function generateThumbnail(\Vegas\Media\Model\File $file, array $size = array('width' => 168, 'height' => 120))
+    public static final function generateThumbnail($file, array $size = array('width' => 168, 'height' => 120))
     {
         if(!empty($file->original_destination) && isset($size['width']) && isset($size['height'])) {
 

@@ -10,11 +10,19 @@
  * file that was distributed with this source code.
  */
  
-namespace VegasTest\Db\Mapping;
+namespace Vegas\Db\Mapping;
 
 use Vegas\Db\Decorator\CollectionAbstract;
 use Vegas\Db\MappingManager;
-use Vegas\Media\Model\File;
+
+class File extends CollectionAbstract
+{
+    public function getSource()
+    {
+        return 'vegas_files';
+    }
+}
+
 
 class Foo extends CollectionAbstract
 {
@@ -62,7 +70,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
         foreach (Foo::find() as $foo) { $foo->delete(); }
 
         $mappingManager = new MappingManager();
-        $mappingManager->add(new \Vegas\Media\Db\Mapping\File());
+        $fileMapper = new \Vegas\Media\Db\Mapping\File(new File());
+
+        $mappingManager->add($fileMapper);
 
         $file = $this->mockFile(false);
         $this->mockFooRecord($file);

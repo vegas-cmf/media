@@ -17,18 +17,19 @@ class Decorator
 {
     private $record;
     private $extraData;
-    
+
     /**
-     * @param \Vegas\Media\Model\File $record
+     * @param $record
+     * @param array $extraData
      */
-    public function __construct(\Vegas\Media\Model\File $record, $extraData = array())
+    public function __construct($record, $extraData = array())
     {
         $this->record = $record;
         $this->extraData = $extraData;
     }
 
     /**
-     * @return \Vegas\Media\Model\File
+     * @return \stdClass
      */
     public function getRecord()
     {
