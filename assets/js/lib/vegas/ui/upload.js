@@ -39,7 +39,8 @@ $(document).ready(function() {
         var options = {
             url: uploader.data('url'),
             preview: {
-                selector: '[data-for-id=' + uploader.data('id') + '] [data-jq-upload-preview]'
+                selector: '[data-for-id=' + uploader.data('id') + '] [data-jq-upload-preview]',
+                container: '[data-jq-upload-preview-stored]'
             },
             selectFileText: uploader.data('button-add-label'),
             trigger: {
