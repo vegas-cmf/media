@@ -130,7 +130,6 @@ class Renderer
             <div data-jq-upload-preview-stored>
                 <p>
                     '.$fileHtml.'
-                    <br><br>
                     '.$baseElementsHtml.'
                     <input type="hidden" name="'.$this->upload->getName().'['.$index.'][file_id]" value="'.$decorator->getId().'">
                     <br>
