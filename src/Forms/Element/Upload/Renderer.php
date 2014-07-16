@@ -81,10 +81,12 @@ class Renderer
             '</div>';
 
         if($this->upload->getRenderPreview()) {
-
             $values = $this->upload->getValue();
-            
-            if(!empty($values) && is_array($values)) {
+            if(!empty($values)) {
+                if(is_string($values)) {
+                    $values = json_decode($values, true);
+                }
+
                 foreach($values as $index => $file) {
                     $html .= $this->getPreviewDecorator($file);
                 }
