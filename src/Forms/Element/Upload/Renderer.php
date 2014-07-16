@@ -81,10 +81,12 @@ class Renderer
             '</div>';
 
         if($this->upload->getRenderPreview()) {
-
             $values = $this->upload->getValue();
-            
-            if(!empty($values) && is_array($values)) {
+            if(!empty($values)) {
+                if(is_string($values)) {
+                    $values = json_decode($values, true);
+                }
+
                 foreach($values as $index => $file) {
                     $html .= $this->getPreviewDecorator($file);
                 }
@@ -128,7 +130,6 @@ class Renderer
             <div data-jq-upload-preview-stored>
                 <p>
                     '.$fileHtml.'
-                    <br><br>
                     '.$baseElementsHtml.'
                     <input type="hidden" name="'.$this->upload->getName().'['.$index.'][file_id]" value="'.$decorator->getId().'">
                     <br>
