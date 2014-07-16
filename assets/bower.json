@@ -1,0 +1,20 @@
+{
+  "name": "Vegas Media Assets",
+  "version": "1.0.0",
+  "authors": [
+    "Arkadiusz Ostrycharz <arkadiusz.ostrycharz@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "com",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery-uploader": "https://github.com/adrianmalik/jquery-uploader.git"
+  }
+}
