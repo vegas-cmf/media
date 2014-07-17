@@ -35,9 +35,9 @@ class Helper
      *          "updated_at": NumberInt(1394171751)
      *      }
      *
-     * @param array $files
+     * @param array|ArrayObject $files
      */
-    public static final function moveFilesFrom(array $files)
+    public static final function moveFilesFrom($files)
     {
         foreach($files as $file) {
             self::moveFile($file->getRecord());
