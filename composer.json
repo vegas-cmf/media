@@ -13,22 +13,6 @@
         {
             "type" : "git",
             "url" : "https://github.com/phalcon/phalcon-devtools.git"
-        },
-        {
-            "type" : "git",
-            "url" : "https://bitbucket.org/amsdard/vegas-cmf-core.git"
-        },
-        {
-            "type" : "git",
-            "url" : "https://bitbucket.org/amsdard/vegas-cmf-validation.git"
-        },
-        {
-            "type" : "git",
-            "url" : "https://bitbucket.org/amsdard/vegas-cmf-filter.git"
-        },
-        {
-            "type" : "git",
-            "url" : "https://bitbucket.org/amsdard/vegas-cmf-forms.git"
         }
     ],
     "require": {
