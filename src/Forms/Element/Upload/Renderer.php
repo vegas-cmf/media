@@ -88,7 +88,7 @@ class Renderer
                 }
 
                 foreach($values as $index => $file) {
-                    $html .= $this->getPreviewDecorator($file);
+                    $html .= $this->getPreviewDecorator($index, $file);
                 }
             }
         }
@@ -96,7 +96,7 @@ class Renderer
         return $html;
     }
 
-    private function getPreviewDecorator($file)
+    private function getPreviewDecorator($index, $file)
     {
         $fileField = $this->upload->getModel()->findById($file['file_id']);
 
