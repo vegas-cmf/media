@@ -100,7 +100,7 @@ class Renderer
     {
         $fileField = $this->upload->getModel()->findById($file['file_id']);
 
-        $decorator = new \Vegas\Media\File\Decorator($fileField);
+        $decorator = new \Vegas\Media\File\Decorator($fileField); 
 
         $baseElementsHtml = '';
 

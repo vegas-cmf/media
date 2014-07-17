@@ -80,41 +80,49 @@ class File implements MappingInterface
      */
     public function resolve(& $value)
     {
+        $extraData = array();
         $files = array();
         if (is_array($value)) {
-            $files = $this->resolveArray($value);
-        }
+            if (!empty($value['file_id'])) {
+                $extraDataTmp = array();
+                foreach ($value as $extraDataKey => $extraDataValue) {
+                    if ($extraDataKey !== 'file_id') {
+                        $extraDataTmp[$extraDataKey] = $extraDataValue;
+                    }
+                }
 
-        $decoratedFiles = new \ArrayObject();
-        foreach ($files as $file) {
-            if (!$file instanceof $this->fileModel) {
-                continue;
-            }
-            $decoratedFiles->append(new Decorator($file));
-        }
-        $value = $decoratedFiles;
+                $extraData = $extraDataTmp;
+                $files[] = call_user_func(array($this->fileModel, 'findById'), $value['file_id']);
+            } else {
+                foreach ($value as $index => $file) {
+                    if (!empty($file['file_id'])) {
+                        $modelFile = call_user_func(array($this->fileModel, 'findById'), $file['file_id']);
 
-        return $value;
-    }
+                        $extraDataTmp = array();
+                        foreach ($file as $extraDataKey => $extraDataValue) {
+                            if ($extraDataKey !== 'file_id') {
+                                $extraDataTmp[$extraDataKey] = $extraDataValue;
+                            }
+                        }
 
-    /**
-     * @param array $value
-     * @return array
-     */
-    private function resolveArray(array $value)
-    {
-        $files = array();
-
-        if (!empty($value['file_id'])) {
-            $files[] = call_user_func(array($this->fileModel, 'findById'), $value['file_id']);
-        } else {
-            foreach ($value as $file) {
-                if (!empty($file['file_id'])) {
-                    $files[] = call_user_func(array($this->fileModel, 'findById'), $file['file_id']);
+                        $extraData[$index] = $extraDataTmp;
+                        $files[] = $modelFile;
+                    }
                 }
             }
         }
 
-        return $files;
+        $decoratedFiles = new \ArrayObject();
+        foreach ($files as $index => $file) {
+            if (!$file instanceof $this->fileModel) {
+                continue;
+            }
+
+
+            $decoratedFiles->append(new Decorator($file, $extraData[$index]));
+        }
+        $value = $decoratedFiles;
+
+        return $value;
     }
 }
