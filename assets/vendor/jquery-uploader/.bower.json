@@ -1,0 +1,13 @@
+{
+  "name": "jquery-uploader",
+  "homepage": "https://github.com/adrianmalik/jquery-uploader",
+  "_release": "aa9574f350",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "aa9574f350f0921898a72d7cf197f36f6531812a"
+  },
+  "_source": "https://github.com/adrianmalik/jquery-uploader.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/adrianmalik/jquery-uploader.git"
+}
