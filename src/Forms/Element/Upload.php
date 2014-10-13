@@ -19,7 +19,7 @@ namespace Vegas\Forms\Element;
 use \Vegas\Forms\Element\Exception\InvalidAssetsManagerException;
 use \Phalcon\Forms\Element\File;
 
-class Upload extends File implements AssetsInjectableInterface
+class Upload extends File
 {
     /**
      * Describes single mode of uploading file
@@ -188,6 +188,17 @@ class Upload extends File implements AssetsInjectableInterface
         $renderer = new Upload\Renderer($this, $attributes);
 
         return $renderer->run();
+    }
+
+    /**
+     * Temporary method for forms v1.1 usage.
+     *
+     * @param array $attributes
+     * @return string
+     */
+    public function renderDecorated($attributes = array())
+    {
+        return $this->render($attributes);
     }
 
     /**
