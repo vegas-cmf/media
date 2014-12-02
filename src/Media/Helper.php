@@ -90,15 +90,15 @@ class Helper
      * {ORIGINAL_DESTINATION_OF_THE_FILE}/thumbnails/filename.{ext}
      *
      * @param FileModel $file
-     * @param array $resize The resize parameters  (width, height, fit)
+     * @param array $size The resize parameters  (width, height, fit)
      * @param array $crop The cropping parameters (left, top)
      */
     public static final function generateThumbnail(
             $file, 
-            array $resize = array('width' => 168, 'height' => 120, 'fit' => 'outside'), 
+            array $size = array('width' => 168, 'height' => 120, 'fit' => 'outside'), 
             array $crop = array('left' => 'center', 'top' => 'middle')
     ) {
-        if(!empty($file->original_destination) && isset($resize['width']) && isset($resize['height'])) {
+        if(!empty($file->original_destination) && isset($size['width']) && isset($size['height'])) {
 
             // ie. string(47) "/var/www/vegas/public/uploads/5326acd311dd4.jpg"
             $filePath = $file->original_destination . '/' . $file->temp_name;
@@ -108,8 +108,8 @@ class Helper
             }
             
             // Make sure we have a fit parameter
-            if(!isset($resize['fit'])) {
-                $resize['fit'] = 'outside';
+            if(!isset($size['fit'])) {
+                $size['fit'] = 'outside';
             }        
             
             // Make sure we have the crop parameters
@@ -121,9 +121,9 @@ class Helper
             }
             
             WideImage::load($filePath)
-                        ->resize($resize['width'], $resize['height'], $resize['fit'])
-                        ->crop($crop['left'], $crop['top'], $resize['width'], $resize['height'])
-                        ->saveToFile($file->original_destination . '/thumbnails/' . $resize['width'] . '_' . $resize['height'] . '_' . $file->temp_name);
+                        ->resize($size['width'], $size['height'], $size['fit'])
+                        ->crop($crop['left'], $crop['top'], $size['width'], $size['height'])
+                        ->saveToFile($file->original_destination . '/thumbnails/' . $size['width'] . '_' . $size['height'] . '_' . $file->temp_name);
         }
     }
 }
