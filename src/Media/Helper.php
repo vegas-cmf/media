@@ -1,5 +1,5 @@
 <?php
-/**1
+/**
  * This file is part of Vegas package
  *
  * @author Adrian Malik <adrian.malik.89@gmail.com>
@@ -92,8 +92,11 @@ class Helper
      * @param FileModel $file
      * @param array $size
      */
-    public static final function generateThumbnail($file, array $size = array('width' => 168, 'height' => 120))
-    {
+    public static final function generateThumbnail(
+            $file, 
+            array $resize = array('width' => 168, 'height' => 120, 'fit' => 'outside'), 
+            array $crop = array('left' => 'center', 'top' => 'middle')
+    ) {
         if(!empty($file->original_destination) && isset($size['width']) && isset($size['height'])) {
 
             // ie. string(47) "/var/www/vegas/public/uploads/5326acd311dd4.jpg"
@@ -102,11 +105,24 @@ class Helper
             if (!file_exists($file->original_destination . '/thumbnails')) {
                 mkdir($file->original_destination . '/thumbnails', 0777, true);
             }
-
+            
+            // Make sure we have a fit parameter
+            if(!isset($size['fit'])) {
+                $size['fit'] = 'outside';
+            }        
+            
+            // Make sure we have the crop parameters
+            if(!isset($crop['left'])) {
+                $crop['left'] = 'center';
+            }
+            if(!isset($crop['top'])) {
+                $crop['top'] = 'middle';
+            }
+            
             WideImage::load($filePath)
-                ->resize($size['width'], $size['height'], 'outside')
-                ->crop('center', 'middle', $size['width'], $size['height'])
-                ->saveToFile($file->original_destination . '/thumbnails/' . $size['width'] . '_' . $size['height'] . '_' . $file->temp_name);
+                        ->resize($resize['width'], $resize['height'], $resize['fit'])
+                        ->crop($crop['left'], $crop['top'], $size['width'], $size['height'])
+                        ->saveToFile($file->original_destination . '/thumbnails/' . $size['width'] . '_' . $size['height'] . '_' . $file->temp_name);
         }
     }
 }
