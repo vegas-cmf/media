@@ -51,7 +51,7 @@ class UploadTest extends \PHPUnit_Framework_TestCase
         try {
             $this->form->get('upload')->render();
         } catch (\Exception $ex) {
-            $this->assertInstanceOf('\Vegas\Forms\Element\Exception\InvalidAssetsManagerException', $ex);
+            $this->assertInstanceOf('\Vegas\Forms\Exception', $ex);
         }
 
         $this->form->get('upload')->setAssetsManager($this->di->get('assets'));

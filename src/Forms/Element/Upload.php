@@ -16,8 +16,8 @@
  */
 namespace Vegas\Forms\Element;
 
-use \Vegas\Forms\Element\Exception\InvalidAssetsManagerException;
-use \Phalcon\Forms\Element\File;
+use Phalcon\Forms\Element\File;
+use Vegas\Forms\Exception;
 
 class Upload extends File
 {
@@ -445,7 +445,7 @@ class Upload extends File
     private function addAssets()
     {
         if(!$this->assets) {
-            throw new InvalidAssetsManagerException();
+            throw new Exception('No assets manager.');
         }
 
         $this->assets->addCss('assets/css/common/upload.css');
