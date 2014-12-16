@@ -15,6 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "jquery-uploader": "https://github.com/adrianmalik/jquery-uploader.git"
+    "jquery-uploader": "https://github.com/adrianmalik/jquery-uploader.git",
+    "alertify": "*"
   }
 }
