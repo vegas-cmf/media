@@ -70,6 +70,6 @@ class UploadTest extends \PHPUnit_Framework_TestCase
         $this->form->get('upload')->setBaseElements([$textField]);
         $this->form->get('upload')->getDecorator()->setTemplateName('jquery');
 
-        $this->assertContains('<input type="text" name="[[additional_text]]"', $this->form->get('upload')->renderDecorated());
+        $this->assertContains('<input type="text" name="{{additional_text}}"', $this->form->get('upload')->renderDecorated());
     }
 }
