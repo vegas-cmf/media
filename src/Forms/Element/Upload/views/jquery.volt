@@ -1,5 +1,6 @@
 {% do assets.addCss('assets/css/common/upload.css') %}
 {% do assets.addJs('assets/vendor/alertify/alertify.js') %}
+{% do assets.addJs('assets/vendor/handlebars/handlebars.js') %}
 {% do assets.addJs('assets/vendor/jquery-uploader/jquery-uploader.js') %}
 {% do assets.addJs('assets/js/lib/vegas/ui/upload.js') %}
 
