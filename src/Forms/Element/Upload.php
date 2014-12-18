@@ -16,11 +16,19 @@
  */
 namespace Vegas\Forms\Element;
 
+use \Vegas\Forms\Element\Exception\InvalidAssetsManagerException;
 use Phalcon\Forms\Element\File;
 use Vegas\Forms\Exception;
 
+use Vegas\Forms\Decorator\DecoratedTrait;
+use Vegas\Forms\Decorator;
+
 class Upload extends File
 {
+    use DecoratedTrait {
+        renderDecorated as renderDecoratedDefault;
+    }
+    
     /**
      * Describes single mode of uploading file
      */
@@ -151,7 +159,23 @@ class Upload extends File
             }
         }
 
-        parent::__construct($name, $attributes);
+        parent::__construct($name, $attributes);        
+        $this->setName($name);
+
+        $templatePath = implode(DIRECTORY_SEPARATOR, [dirname(__FILE__), 'Upload', 'views', '']);
+        $this->setDecorator(new Decorator($templatePath));
+    }
+    
+    /**
+     * Render element decorated with specific view/template.
+     *
+     * @param array|null $attributes
+     * @return string
+     */
+    public function renderDecorated($attributes = null)
+    {
+        $this->setUploadAttributes();
+        return $this->renderDecoratedDefault($attributes);
     }
 
     /**
@@ -172,33 +196,6 @@ class Upload extends File
     public function getRenderPreview()
     {
         return $this->renderPreview;
-    }
-
-    /**
-     * Renders upload element using Upload\Renderer
-     *
-     * @param array $attributes
-     * @return string
-     */
-    public function render($attributes = array())
-    {
-        $this->addAssets();
-        $this->setUploadAttributes();
-
-        $renderer = new Upload\Renderer($this, $attributes);
-
-        return $renderer->run();
-    }
-
-    /**
-     * Temporary method for forms v1.1 usage.
-     *
-     * @param array $attributes
-     * @return string
-     */
-    public function renderDecorated($attributes = array())
-    {
-        return $this->render($attributes);
     }
 
     /**
@@ -436,43 +433,85 @@ class Upload extends File
     {
         return $this->uploadAttributes;
     }
-
+    
     /**
-     * Adds js and css to the website
-     *
-     * @throws Exception\InvalidAssetsManagerException
-     */
-    private function addAssets()
-    {
-        if(!$this->assets) {
-            throw new Exception('No assets manager.');
-        }
-
-        $this->assets->addCss('assets/css/common/upload.css');
-        $this->assets->addJs('assets/vendor/jquery-uploader/jquery-uploader.js');
-        $this->assets->addJs('assets/js/lib/vegas/ui/upload.js');
-    }
-
-    /**
-     * Sets assets manager
-     *
-     * @param \Phalcon\Assets\Manager $assets
-     * @return $this
-     */
-    public function setAssetsManager(\Phalcon\Assets\Manager $assets)
-    {
-        $this->assets = $assets;
-
-        return $this;
-    }
-
-    /**
-     * Returns assets manager
+     * Returns upload attributes
      *
      * @return null
      */
-    public function getAssetsManager()
+    public function getUploadAttribute($key)
     {
-        return $this->assets;
+        if(isset($this->uploadAttributes[$key])) return $this->uploadAttributes[$key];
+        return null;
+    }
+    
+    public function getFileInput()
+    {
+        $file = new \Phalcon\Forms\Element\File($this->getName());
+        $file_attributes = array_merge($this->getAttributes(), $this->getUploadAttributes());
+        $file->setAttributes($file_attributes);
+        $label = 'Add file';
+
+        $buttonLabels = $this->getButtonLabels();
+
+        if(isset($buttonLabels) && isset($buttonLabels['add'])) {
+            $label = $buttonLabels['add'];
+        }
+
+        $file->setAttribute('data-button-add-label', $label);
+        $file->setAttribute('value', null);
+        return $file->render();
+    }
+    
+    public function getPreviewData() {
+        $preview_data = array();
+        $values = $this->getValue();
+        if(!empty($values)) {
+            if(is_string($values)) {
+                $values = json_decode($values, true);
+            }
+            if($values == null) $values = array();
+            foreach($values as $index => $file) {
+                $decorator = $this->getPreviewDecorator($index, $file);
+                $data = array();
+                $data['index'] = $index;
+                $data['file_id'] = $decorator->getId();
+                $data['file_basename'] = $decorator->getFileInfo()->getBasename();
+                $data['file_mimetype'] = $decorator->getMimeType();
+                if(!empty($data['file_mimetype']) && is_numeric(strpos($data['file_mimetype'], 'image'))) {
+                    $data['file_is_image'] = true;
+                }
+                else $data['file_is_image'] = false;
+                $data['base_elements'] = $this->getBaseElementsRendered($index, $file);
+                $preview_data[] = $data;
+            }
+        }
+        return $preview_data;
+    }
+    
+    private function getPreviewDecorator($index, $file) {
+        $fileField = $this->getModel()->findById($file['file_id']);
+        $decorator = new \Vegas\Media\File\Decorator($fileField); 
+
+        return $decorator;
+    }
+    
+    private function getBaseElementsRendered($index, $file) {
+        $baseElementsArray = array();
+        $baseElements = $this->getBaseElements();
+        if(!empty($baseElements)) {
+            foreach($baseElements as $baseElement) {
+                $baseElementName = $baseElement->getName();
+                $originalName = substr($baseElementName, 2, -2);
+                $defaultValue = null;
+                if(!empty($file[$originalName])) {
+                    $defaultValue = $file[$originalName];
+                }
+                $baseElement->setDefault($defaultValue);
+                $baseElementHtml = $baseElement->renderDecorated();
+                $baseElementsArray[] = str_replace($baseElementName, $this->getName().'['.$index.']['.$originalName.']', $baseElementHtml);
+            }
+        }
+        return $baseElementsArray;
     }
 }
