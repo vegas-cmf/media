@@ -12,10 +12,11 @@
 namespace Vegas\Tests\Forms\Element;
 
 use Phalcon\DI;
+use Vegas\Forms\Element\File;
 use Vegas\Forms\Element\Upload;
 use Vegas\Tests\Stub\Models\FakeModel;
-use \Vegas\Forms\Form,
-    \Phalcon\Forms\Element\Text;
+use Vegas\Forms\Form;
+use Vegas\Forms\Element\Text;
 use Vegas\Validation\Validator\PresenceOf;
 
 class FakeVegasForm extends Form
@@ -46,19 +47,29 @@ class UploadTest extends \PHPUnit_Framework_TestCase
 
     public function testRender()
     {
-        $this->assertNull($this->form->get('upload')->getAssetsManager());
+        $this->assertEquals((new File('upload'))->render(), $this->form->get('upload')->render());
+        $this->assertEquals((new File('upload'))->render(), $this->form->get('upload')->renderDecorated());
 
-        try {
-            $this->form->get('upload')->render();
-        } catch (\Exception $ex) {
-            $this->assertInstanceOf('\Vegas\Forms\Element\Exception\InvalidAssetsManagerException', $ex);
-        }
+        $html1 = 'data-form-element-upload-wrapper="true"';
+        $html2 = '<input type="file" id="upload" name="upload" data-form-element-upload="true"';
+        $html3 = '<div data-jq-upload-error></div>';
+        $html4 = '<div data-jq-upload-preview></div>';
 
-        $this->form->get('upload')->setAssetsManager($this->di->get('assets'));
+        $this->form->get('upload')->getDecorator()->setTemplateName('jquery');
 
-        $generatedHtmlLength = strlen('<div data-for-id="537ca0e52a49c" data-form-element-upload-wrapper="true"><input type="file" id="upload" name="upload" data-form-element-upload="true" data-id="537ca0e52a49c" data-trigger-type="button" data-button-add-label="Add file" /><div data-jq-upload-error></div><div data-jq-upload-preview></div><div data-templates></div></div>');
+        $this->assertContains($html1, $this->form->get('upload')->renderDecorated());
+        $this->assertContains($html2, $this->form->get('upload')->renderDecorated());
+        $this->assertContains($html3, $this->form->get('upload')->renderDecorated());
+        $this->assertContains($html4, $this->form->get('upload')->renderDecorated());
+    }
 
-        $this->assertInstanceOf('\Phalcon\Assets\Manager', $this->form->get('upload')->getAssetsManager());
-        $this->assertEquals($generatedHtmlLength, strlen($this->form->get('upload')->render()));
+    public function testBaseElements()
+    {
+        $textField = new Text('additional_text');
+
+        $this->form->get('upload')->setBaseElements([$textField]);
+        $this->form->get('upload')->getDecorator()->setTemplateName('jquery');
+
+        $this->assertContains('<input type="text" name="[[additional_text]]"', $this->form->get('upload')->renderDecorated());
     }
 }

@@ -15,7 +15,7 @@ namespace Vegas\Mvc\Controller;
 
 use Vegas\Mvc\Controller\Crud\Exception\UploaderNotSetException;
 
-class CrudUpload extends Crud
+abstract class CrudUploadAbstract extends CrudAbstract
 {
     /**
      * @ACL(name="upload", inherit='edit')
