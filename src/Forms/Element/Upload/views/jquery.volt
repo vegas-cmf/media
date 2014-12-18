@@ -11,7 +11,7 @@
     <div data-templates>
         {% if element.getBaseElements() is type('array') %}
             {% for baseElement in element.getBaseElements() %}
-                {% do baseElement.setName('[['~baseElement.getName()~']]') %}
+                {% do baseElement.setName('{{'~baseElement.getName()~'}}') %}
                 <script id="{{ baseElement.getAttribute('data-template-id') }}" type="text/x-handlebars-template">
                 {{ baseElement.renderDecorated() }}
             </script>
