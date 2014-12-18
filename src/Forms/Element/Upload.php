@@ -16,14 +16,12 @@
  */
 namespace Vegas\Forms\Element;
 
-use \Vegas\Forms\Element\Exception\InvalidAssetsManagerException;
 use Phalcon\Forms\Element\File;
 use Vegas\Forms\Exception;
-
 use Vegas\Forms\Decorator\DecoratedTrait;
 use Vegas\Forms\Decorator;
 
-class Upload extends File
+class Upload extends File implements Decorator\DecoratedInterface
 {
     use DecoratedTrait {
         renderDecorated as renderDecoratedDefault;
