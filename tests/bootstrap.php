@@ -20,4 +20,20 @@ $di->set('collectionManager', function() {
     return new \Phalcon\Mvc\Collection\Manager();
 });
 
+$view = new \Phalcon\Mvc\View();
+$view->registerEngines(array(
+    '.volt' => function ($this, $di) {
+            $volt = new \Phalcon\Mvc\View\Engine\Volt($this, $di);
+            $volt->setOptions(array(
+                'compiledPath' => TESTS_ROOT_DIR.'/fixtures/cache/',
+                'compiledSeparator' => '_'
+            ));
+
+            return $volt;
+        },
+    '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
+));
+
+$di->set('view', $view);
+
 \Phalcon\DI::setDefault($di);

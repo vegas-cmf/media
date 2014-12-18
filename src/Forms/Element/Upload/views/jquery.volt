@@ -1,5 +1,5 @@
 {% do assets.addCss('assets/css/common/upload.css') %}
-{% do assets.addJs('assets/vendor/alertifyjs/dist/js/alertify.js') %}
+{% do assets.addJs('assets/vendor/alertify/alertify.js') %}
 {% do assets.addJs('assets/vendor/jquery-uploader/jquery-uploader.js') %}
 {% do assets.addJs('assets/js/lib/vegas/ui/upload.js') %}
 
@@ -9,16 +9,16 @@
     <div data-jq-upload-preview></div>
     <div data-templates>
         {% if element.getBaseElements() is type('array') %}
-        {% for baseElement in element.getBaseElements() %}
-            {% do baseElement.setName('[['~baseElement.getName()~']]') %}
-            <script id="{{ baseElement.getAttribute('data-template-id') }}" type="text/x-handlebars-template">
+            {% for baseElement in element.getBaseElements() %}
+                {% do baseElement.setName('[['~baseElement.getName()~']]') %}
+                <script id="{{ baseElement.getAttribute('data-template-id') }}" type="text/x-handlebars-template">
                 {{ baseElement.renderDecorated() }}
             </script>
-        {% endfor %}
+            {% endfor %}
         {% endif %}
     </div>
 </div>
-    
+
 {% for previewData in element.getPreviewData() %}
     <div data-jq-upload-preview-stored>
         <p>
