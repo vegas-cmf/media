@@ -31,7 +31,15 @@ $(document).ready(function() {
 
         uploader.closest('form').each(function() {
             $(this).find('[data-jq-upload-preview-stored]').find('button').click(function(clickEvent) {
+                var uploaderName = uploader.attr('name');
+
+                var inputsCount = $('input[name*="deleted_files[' + uploaderName + ']"]').length;
+                var fileInputId = $(this).parent().find('input');
+                var input = $('<input type="hidden" name="deleted_files[' + uploaderName + '][' + inputsCount + '][file_id]" value="' + fileInputId.val() +'"/>');
+                uploader.after(input);
+
                 $(this).closest('[data-jq-upload-preview-stored]').remove();
+
                 clickEvent.preventDefault();
             });
         });
