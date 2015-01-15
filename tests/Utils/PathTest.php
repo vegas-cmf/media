@@ -16,15 +16,52 @@ use Vegas\Utils\Path;
 
 class PathTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAllPaths()
+    public function testRootPath()
     {
         $this->assertEquals('/', Path::getRelativePath(Path::getRootPath()));
-        $this->assertEquals('/app', Path::getRelativePath(Path::getAppPath()));
-        $this->assertEquals('/config', Path::getRelativePath(Path::getConfigPath()));
-        $this->assertEquals('/tests/Utils', Path::getRelativePath(Path::getFileDirectory(__FILE__)));
-        $this->assertEquals('/tests', Path::getRelativePath(Path::getTestsPath()));
-        $this->assertEquals('/temp', Path::getRelativePath(Path::getTempPath()));
+    }
+
+    public function testPublicPath()
+    {
         $this->assertEquals('', Path::getRelativePath(Path::getPublicPath()));
+    }
+
+    public function testLibPath()
+    {
         $this->assertEquals('/lib', Path::getRelativePath(Path::getLibPath()));
+    }
+
+    public function testAppPath()
+    {
+        $this->assertEquals('/app', Path::getRelativePath(Path::getAppPath()));
+    }
+
+    public function testConfigPath()
+    {
+        $this->assertEquals('/config', Path::getRelativePath(Path::getConfigPath()));
+    }
+
+    public function testTempPath()
+    {
+        $this->assertEquals('/temp', Path::getRelativePath(Path::getTempPath()));
+    }
+
+    public function testTestsPath()
+    {
+        $this->assertEquals('/tests', Path::getRelativePath(Path::getTestsPath()));
+    }
+
+    public function testNoRelativePathParam()
+    {
+        try {
+            $this->assertEquals('/tests', Path::getRelativePath(array()));
+        } catch(\Exception $exception) {
+            $this->assertInstanceOf('\Vegas\Utils\Path\Exception\InvalidPathException', $exception);
+        }
+    }
+
+    public function testFileDirectory()
+    {
+        $this->assertEquals('/tests/Utils', Path::getRelativePath(Path::getFileDirectory(__FILE__)));
     }
 }

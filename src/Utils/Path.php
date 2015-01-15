@@ -16,6 +16,8 @@
 
 namespace Vegas\Utils;
 
+use Vegas\Utils\Path\Exception\InvalidPathException;
+
 final class Path
 {
     /**
@@ -92,16 +94,21 @@ final class Path
      * Returns relative path of the absolute path. When you pass $absolutePath='/var/www/vegas/config'  then the result
      * should be '/config'
      *
-     * @param $absolutePath
+     * @param string $absolutePath
+     * @throws InvalidPathException
      * @return mixed|string
      */
     public static final function getRelativePath($absolutePath)
     {
+        if (!is_string($absolutePath)) {
+            throw new InvalidPathException();
+        }
+
         $pattern = array(self::getRootPath(), DIRECTORY_SEPARATOR, '//');
         $replacement = array('', '/', '/');
-        
+
         $raltivePath = str_replace($pattern, $replacement, $absolutePath);
-            
+
         if(substr($raltivePath, 0, 1) != '/') {
             $raltivePath = '/' . $raltivePath;
         }
@@ -112,11 +119,16 @@ final class Path
     /**
      * Returns the name of directory where file is located
      *
-     * @param $path
+     * @param string $path
+     * @throws InvalidPathException
      * @return string
      */
     public static final function getFileDirectory($path)
     {
+        if (!is_string($path)) {
+            throw new InvalidPathException();
+        }
+
         $directoryName = dirname($path);
 
         return $directoryName;
