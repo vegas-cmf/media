@@ -26,7 +26,7 @@ class File extends CollectionAbstract implements FileInterface
 
 class UploaderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testNoFiles()
+    public function testSetFiles()
     {
         try {
             $files = array();
@@ -59,5 +59,18 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
         } catch (\Exception $exception) {
             $this->assertInstanceOf('\Vegas\Media\Uploader\Exception\InvalidMaxSizeException', $exception);
         }
+    }
+
+    public function testSetExtensions()
+    {
+        $inputExtensions = array('jpg', 'png');
+        $uploader = new Uploader(new File());
+        $uploader->setExtensions($inputExtensions);
+
+        $reflectionProperty = new \ReflectionProperty('\Vegas\Media\Uploader', 'extensions');
+        $reflectionProperty->setAccessible(true);
+        $outputExtensions = $reflectionProperty->getValue($uploader);
+
+        $this->assertTrue($inputExtensions == $outputExtensions);
     }
 }
