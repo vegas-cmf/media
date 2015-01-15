@@ -51,10 +51,19 @@ class PathTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/tests', Path::getRelativePath(Path::getTestsPath()));
     }
 
-    public function testNoRelativePathParam()
+    public function testWrongRelativePathParam()
     {
         try {
             $this->assertEquals('/tests', Path::getRelativePath(array()));
+        } catch(\Exception $exception) {
+            $this->assertInstanceOf('\Vegas\Utils\Path\Exception\InvalidPathException', $exception);
+        }
+    }
+
+    public function testWrongFileDirectoryParam()
+    {
+        try {
+            $this->assertEquals('/tests', Path::getFileDirectory(array()));
         } catch(\Exception $exception) {
             $this->assertInstanceOf('\Vegas\Utils\Path\Exception\InvalidPathException', $exception);
         }
