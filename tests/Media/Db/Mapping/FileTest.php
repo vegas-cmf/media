@@ -37,6 +37,17 @@ class Foo extends CollectionAbstract
     );
 }
 
+class Bar extends CollectionAbstract
+{
+    public function getSource()
+    {
+        return 'bar_media_files';
+    }
+
+    protected $mappings = array(
+        'image' =>  'file'
+    );
+}
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {
@@ -65,6 +76,18 @@ class FileTest extends \PHPUnit_Framework_TestCase
         return $foo;
     }
 
+    protected function mockBarRecord(File $file)
+    {
+        $foo = new Bar();
+        $foo->image = array('file_id' => (string)$file->getId());
+        $foo->width = 800;
+        $foo->height = 700;
+        $foo->title = 'Lorem ipsum';
+        $foo->save();
+
+        return $foo;
+    }
+
     public function testMapper()
     {
         foreach (File::find() as $file) { $file->delete(); }
@@ -75,19 +98,24 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
         $mappingManager->add($fileMapper);
 
-        $file = $this->mockFile(false);
-        $this->mockFooRecord($file);
+        $fooFile = $this->mockFile(false);
+        $barFile = $this->mockFile(false);
+
+        $this->mockFooRecord($fooFile);
+        $this->mockBarRecord($barFile);
 
         $foo = Foo::findFirst();
+        $bar = Bar::findFirst();
 
         $this->assertInstanceOf('\ArrayObject', $foo->readMapped('image'));
+        $this->assertInstanceOf('\ArrayObject', $bar->readMapped('image'));
         $this->assertCount(1, $foo->readMapped('image'));
         $this->assertInternalType('array', $foo->readMapped('image')->getArrayCopy());
         $this->assertInstanceOf('\Vegas\Media\File\Decorator', $foo->readMapped('image')[0]);
         $this->assertInstanceOf('\Vegas\Media\File\Decorator', $foo->readMapped('image')->offsetGet(0));
         $this->assertEquals('origin.jpg', $foo->readMapped('image')[0]->getRecord()->name);
         $this->assertTrue($foo->readMapped('image')[0]->save());
-        $this->assertEquals($file->getId(), $foo->readMapped('image')[0]->getRecord()->getId());
+        $this->assertEquals($fooFile->getId(), $foo->readMapped('image')[0]->getRecord()->getId());
         $this->assertEquals('/origin/temp.jpg', $foo->readMapped('image')[0]->getPath());
         $this->assertEquals('/origin/temp.jpg', $foo->readMapped('image')[0]->getUrl());
         $this->assertInstanceOf('\SplFileInfo', $foo->readMapped('image')[0]->getFileInfo());
