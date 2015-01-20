@@ -476,6 +476,7 @@ class Upload extends File implements Decorator\DecoratedInterface
                 $data['file_id'] = $decorator->getId();
                 $data['file_basename'] = $decorator->getFileInfo()->getBasename();
                 $data['file_mimetype'] = $decorator->getMimeType();
+                $data['url'] = $decorator->getUrl();
                 if(!empty($data['file_mimetype']) && is_numeric(strpos($data['file_mimetype'], 'image'))) {
                     $data['file_is_image'] = true;
                 }

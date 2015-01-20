@@ -24,7 +24,7 @@
     <div data-jq-upload-preview-stored>
         <p>
             {% if previewData['file_is_image'] is true %}
-                <img src="/uploads/{{previewData['file_basename']}}" width="190" >
+                <img src="{{ previewData['url'] }}" width="190" >
             {% endif %}
             {% for baseElementRendered in previewData['base_elements'] %}
                 {{ baseElementRendered }}
