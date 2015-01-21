@@ -41,7 +41,7 @@ class Bar extends CollectionAbstract
 {
     public function getSource()
     {
-        return 'bar_media_files';
+        return 'foo_media_files';
     }
 
     protected $mappings = array(
@@ -92,6 +92,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         foreach (File::find() as $file) { $file->delete(); }
         foreach (Foo::find() as $foo) { $foo->delete(); }
+        foreach (Bar::find() as $bar) { $bar->delete(); }
 
         $mappingManager = new MappingManager();
         $fileMapper = new \Vegas\Media\Db\Mapping\File(new File());
