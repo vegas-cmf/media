@@ -1,1 +1,0 @@
-{{ partial('./frontend/foo/partials/test') }}
