@@ -41,6 +41,66 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testSetMimeTypes()
+    {
+        try {
+            $files = array();
+
+            $uploader = new Uploader(new File());
+
+            $uploader->setMimeTypes(['image/jpeg', 'image/png']);
+            $uploader->handle();
+        } catch(\Exception $exception) {
+
+            $this->assertInstanceOf('\Vegas\Media\Uploader\Exception\NoFilesException', $exception);
+        }
+    }
+
+    public function testSetOriginalDestination()
+    {
+        try {
+            $files = array();
+
+            $uploader = new Uploader(new File());
+
+            $uploader->setOriginalDestination('/origin');
+            $uploader->handle();
+        } catch(\Exception $exception) {
+
+            $this->assertInstanceOf('\Vegas\Media\Uploader\Exception\NoFilesException', $exception);
+        }
+    }
+
+    public function testSetMaxFileSize()
+    {
+        try {
+            $files = array();
+
+            $uploader = new Uploader(new File());
+
+            $uploader->setMaxFileSize('10MB');
+            $uploader->handle();
+        } catch(\Exception $exception) {
+
+            $this->assertInstanceOf('\Vegas\Media\Uploader\Exception\NoFilesException', $exception);
+        }
+    }
+
+    public function testSetTempDestination()
+    {
+        try {
+            $files = array();
+
+            $uploader = new Uploader(new File());
+
+            $uploader->setTempDestination('/tmp');
+            $uploader->handle();
+        } catch(\Exception $exception) {
+
+            $this->assertInstanceOf('\Vegas\Media\Uploader\Exception\NoFilesException', $exception);
+        }
+    }
+
     public function testFilterMaxSize()
     {
         $method = new \ReflectionMethod('\Vegas\Media\Uploader', 'filterMaxSize');

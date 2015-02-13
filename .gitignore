@@ -40,3 +40,4 @@ cache/
 
 ./tests/fixtures/app/modules/Test/config/modules.php
 ./tests/fixtures/app/modules/Test/config/services.php
+./tests/fixtures/cache/_*
