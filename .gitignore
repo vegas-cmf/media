@@ -36,3 +36,7 @@ composer.phar
 composer.lock
 
 cache/
+/nbproject/private/
+
+./tests/fixtures/app/modules/Test/config/modules.php
+./tests/fixtures/app/modules/Test/config/services.php

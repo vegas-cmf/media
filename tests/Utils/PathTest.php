@@ -68,9 +68,4 @@ class PathTest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf('\Vegas\Utils\Path\Exception\InvalidPathException', $exception);
         }
     }
-
-    public function testFileDirectory()
-    {
-        $this->assertEquals('/tests/Utils', Path::getRelativePath(Path::getFileDirectory(__FILE__)));
-    }
 }
