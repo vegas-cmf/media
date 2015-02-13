@@ -18,9 +18,9 @@ use Vegas\Mvc\Controller\Crud;
 use Vegas\Test\TestCase;
 use Vegas\Mvc\Controller\Crud\Exception\UploaderNotSetException;
 
-class CrudUploadAbstractTest extends TestCase
+ class CrudUploadAbstractTest extends TestCase
 {
-    protected $model;
+   protected $model;
 
     public function setUp()
     {
@@ -79,6 +79,8 @@ class CrudUploadAbstractTest extends TestCase
         $contentArray = json_decode($response->getContent(), true);
 
         $this->assertEquals($contentArray['$id'],$this->model->getId());
+
+        $this->model->delete();
     }
 
     public function testUploaderNotSetException()
