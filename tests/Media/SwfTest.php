@@ -40,6 +40,21 @@ class SwfTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($method->invoke($swf, $swf->getSource()));
     }
 
+    public function testRender()
+    {
+        $swf = new Swf();
+        $swf->setSource('vegas-cmf.swf');
+
+        $this->assertNotEmpty($swf->getSource());
+        $swf->setWidth(101);
+        $swf->setHeight(201);
+
+        $renderResult = $swf->renderObject();
+
+        $this->assertContains('201',$renderResult);
+        $this->assertContains('101',$renderResult);
+    }
+
     public function testEmbedDecorator()
     {
         $swf = new Swf();
