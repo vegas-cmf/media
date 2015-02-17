@@ -35,7 +35,6 @@ com_crashlytics_export_strings.xml
 composer.phar
 composer.lock
 
-cache/
 /nbproject/private/
 
 ./tests/fixtures/app/modules/Test/config/modules.php
