@@ -15,14 +15,14 @@ namespace Test\Forms;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Validation\Validator\PresenceOf;
 use Vegas\Forms\Element\Upload;
-use Test\Models\Fake as FakeModel;
+use Test\Models\FakeFile as FakeFileModel;
 
 class Fake extends \Phalcon\Forms\Form
 {
     public function initialize()
     {
         $image = new Upload('fake_file');
-        $image->setModel(new FakeModel());
+        $image->setModel(new FakeFileModel());
         $image->setPreviewSize(array('width' => 100, 'height' => 100));
         $image->getDecorator()->setTemplateName('jquery');
         $image->setUploadUrl($this->url->get([

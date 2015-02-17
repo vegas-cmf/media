@@ -14,11 +14,12 @@ namespace Vegas\Tests\Mvc\Controller;
 use Phalcon\DI;
 use Test\Forms\Fake;
 use Test\Models\Fake as FakeModel;
+use Test\Models\FakeFile as FakeFileModel;
 use Vegas\Mvc\Controller\Crud;
 use Vegas\Test\TestCase;
 use Vegas\Mvc\Controller\Crud\Exception\UploaderNotSetException;
 
- class CrudUploadAbstractTest extends TestCase
+class CrudUploadAbstractTest extends TestCase
 {
    protected $model;
 
@@ -67,6 +68,16 @@ use Vegas\Mvc\Controller\Crud\Exception\UploaderNotSetException;
         $this->assertEquals(base64_encode('foobar'), $model->fake_field);
 
         $model->delete();
+    }
+
+    public function testCheckIfImplementsFileInterface()
+    {
+        $method = new \ReflectionMethod('\Test\Controllers\Backend\CrudController', 'checkIfImplementsFileInterface');
+        $method->setAccessible(true);
+        $controller = new \Test\Controllers\Backend\CrudController();
+
+        $this->assertTrue( $method->invoke($controller,new FakeFileModel()) );
+        $this->assertTrue( ! $method->invoke($controller,new FakeModel()) );
     }
 
     public function testDeleteFiles()
