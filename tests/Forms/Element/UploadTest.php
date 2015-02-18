@@ -18,6 +18,15 @@ use Vegas\Tests\Stub\Models\FakeModel;
 use Vegas\Forms\Form;
 use Vegas\Forms\Element\Text;
 use Vegas\Validation\Validator\PresenceOf;
+use Vegas\Db\Decorator\CollectionAbstract;
+
+class FakeFileModel extends CollectionAbstract
+{
+    public function getSource()
+    {
+        return 'vegas_files';
+    }
+}
 
 class FakeVegasForm extends Form
 {
@@ -45,6 +54,20 @@ class UploadTest extends \PHPUnit_Framework_TestCase
         $this->form->add($upload);
     }
 
+    protected function mockFile($isTemp = true)
+    {
+        $file = new FakeFileModel();
+        $file->name = 'test.png';
+        $file->is_temp = $isTemp;
+        $file->temp_name = 'test.png';
+        $file->temp_destination = APP_ROOT.'/public/tmp';
+        $file->original_destination = APP_ROOT.'/public/origin';
+
+        $file->save();
+
+        return $file;
+    }
+
     public function testRender()
     {
         $this->assertEquals((new File('upload'))->render(), $this->form->get('upload')->render());
@@ -66,10 +89,17 @@ class UploadTest extends \PHPUnit_Framework_TestCase
     public function testBaseElements()
     {
         $textField = new Text('additional_text');
+        $testFile = $this->mockFile(true);
+
+        $testValues = json_encode([0=>['file_id' => ''.$testFile->getId()],1=>['file_id' => ''.$testFile->getId()]]);
 
         $this->form->get('upload')->setBaseElements([$textField]);
+        $this->form->get('upload')->setModel(new FakeFileModel());
         $this->form->get('upload')->getDecorator()->setTemplateName('jquery');
+        $this->form->get('upload')->setDefault($testValues);
 
         $this->assertContains('<input type="text" id="{{additional_text}}" name="{{additional_text}}"', $this->form->get('upload')->renderDecorated());
+
+        $testFile->delete();
     }
 }
