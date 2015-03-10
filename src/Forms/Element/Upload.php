@@ -5,12 +5,7 @@
  * @author Adrian Malik <adrian.malik.89@gmail.com>
  * @copyright Amsterdam Standard Sp. Z o.o.
  * @homepage https://bitbucket.org/amsdard/vegas-phalcon
- *
- * @info
- *      1. When you create: $avatar = new MultiUpload('avatar'); it will be single upload
- *      2. When you create $files = new MultiUpload('files[]') it will be multupload
- *      3. setUploadAction is necessary
- *
+ * 
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
