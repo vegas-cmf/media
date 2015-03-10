@@ -533,6 +533,10 @@ Uploader.Filter = function() {
             params.onDragOver = function(htmlElement, event) {};
         }
 
+        if (typeof params.onDragLeave !== 'function') {
+            params.onDragLeave = function(htmlElement, event) {};
+        }
+
         if (typeof params.onDragEnter !== 'function') {
             params.onDragEnter = function(htmlElement, event) {};
         }
@@ -598,6 +602,7 @@ Uploader.Browser = function(params) {
     this.onClick = params.onClick; /* {Function} */
     this.onDragOver = params.onDragOver; /* {Function} */
     this.onDragEnter = params.onDragEnter; /* {Function} */
+    this.onDragLeave = params.onDragLeave; /* {Function} */
 
     this.render = function() {
         self.htmlElement = params.render();
@@ -608,7 +613,7 @@ Uploader.Browser = function(params) {
         $(self.htmlElement).on('drop', function(event) {
             event.preventDefault();
             for (var i = 0; i < event.originalEvent.dataTransfer.files.length; i++) {
-                preview.renderItem(files[i]);
+                preview.renderItem(event.originalEvent.dataTransfer.files[i]);
             }
             self.onDrop(this, event);
         });
@@ -631,6 +636,16 @@ Uploader.Browser = function(params) {
             event.stopPropagation();
             event.preventDefault();
             self.onDragOver(this, event);
+        });
+
+        return self;
+    };
+
+    this.attachOnDragLeave = function() {
+        $(self.htmlElement).on('dragleave', function (event) {
+            event.stopPropagation();
+            event.preventDefault();
+            self.onDragLeave(this, event);
         });
 
         return self;
@@ -713,24 +728,28 @@ $(document).ready(function() {
         browser.attachOnDrop(preview);
         browser.attachOnDragEnter();
         browser.attachOnDragOver();
+        browser.attachOnDragLeave();
 
         preview.renderContainer();
     };
 
     $('[vegas-cmf="upload"]').each(function() {
+        var name = $(this).attr('name');
+        $(this).removeAttr('name');
         var that = $(this);
         var render = null;
 
-        var maxFiles = $(this).attr('max-files');
+        var attributes = [];
+        for (var key in $(this).data()) {
+            attributes[key] = $(this).data()[key];
+        }
+
+        var maxFiles = parseInt($(this).attr('max-files'));
         var uploadUrl = $(this).attr('upload-url');
         var browserLabel = $(this).attr('browser-label');
         var browserType = $(this).attr('browser-type');
+        var minFileSize = $(this).attr('min-file-size');
         var maxFileSize = $(this).attr('max-file-size');
-
-        var minFileSize = null;
-        if ($(this).attr('min-file-size')) {
-            minFileSize = $(this).attr('min-file-size');
-        }
 
         var allowedExtensions = [];
         if ($(this).attr('allowed-extensions')) {
@@ -768,28 +787,45 @@ $(document).ready(function() {
             case 'button':
                 render = function() {
                     browser = (new Uploader.Html()).getButton();
+                    for (var key in attributes) {
+                        browser.setAttribute(key, attributes[key]);
+                    }
                     $(browser).text(browserLabel);
-                    that.after(browser);
+                    that.before(browser);
                     return browser;
                 }
                 break;
             case 'dropzone':
                 render = function() {
                     var browser = (new Uploader.Html()).getDiv();
+                    for (var key in attributes) {
+                        browser.setAttribute(key, attributes[key]);
+                    }
                     $(browser).html('<span>' + browserLabel + '</span');
-                    that.after(browser);
+                    that.before(browser);
                     return browser;
                 }
-
         }
 
         $(this).upload({
             browser : {
                 render: render,
-                onDrop: function(htmlElement, event) {},
+                onDrop: function(htmlElement, event) {
+                    $(htmlElement).removeClass('hover');
+                    $(htmlElement).find('*').show();
+                },
                 onClick: function(htmlElement, event) {},
-                onDragOver: function(htmlElement, event) {},
-                onDragEnter: function(htmlElement, event) {}
+                onDragOver: function(htmlElement, event) {
+
+                },
+                onDragEnter: function(htmlElement, event) {
+                    $(htmlElement).addClass('hover');
+                    $(htmlElement).find('*').hide();
+                },
+                onDragLeave: function(htmlElement, event) {
+                    $(htmlElement).removeClass('hover');
+                    $(htmlElement).find('*').show();
+                }
             },
             preview: {
                 render: function() {
@@ -805,7 +841,7 @@ $(document).ready(function() {
 
                     $(upload).text('Upload');
                     $(cancel).text('Cancel');
-                    $(browser).after(ul);
+                    $(that).after(ul);
 
                     return {
                         container: ul,
@@ -816,7 +852,7 @@ $(document).ready(function() {
                         cancel: cancel
                     };
                 },
-                styles: { width: 500, height: 300},
+                styles: {},
                 maxFiles: maxFiles,
                 minFileSize: minFileSize,
                 maxFileSize: maxFileSize,
@@ -840,9 +876,12 @@ $(document).ready(function() {
                     onError: function(event, file, upload) {},
                     onLoadEnd: function(event, file, upload) {
                         var id = event.srcElement.responseText;
-                        var input = document.createzz
+                        var input = document.createElement('input');
+                        input.setAttribute('name', name + '[]');
+                        input.setAttribute('type', 'hidden');
+                        input.setAttribute('value', id);
 
-                        $(upload).replaceWith('<input name="files[]" type="hidden" value="'+id+'"/>');
+                        $(upload).replaceWith(input);
                     },
                     onTimeout: function(event, file, upload) {},
                     onProgress: function(event, file, upload) {},

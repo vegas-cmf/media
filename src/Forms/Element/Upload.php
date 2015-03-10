@@ -12,9 +12,12 @@
 namespace Vegas\Forms\Element;
 
 use \Phalcon\Forms\Element;
+use Vegas\Upload\Attributes;
 
 class Upload extends Element
 {
+    use Attributes;
+
     const BROWSER_BUTTON = 'button';
     const BROWSER_DROPZONE = 'dropzone';
 
@@ -22,13 +25,7 @@ class Upload extends Element
     private $browserLabel = null;
     private $browserType = null;
     private $name = null;
-    private $maxFiles = null;
-    private $maxFileSize = null;
-    private $minFileSize = null;
-    private $allowedExtensions = null;
-    private $forbiddenExtensions = null;
-    private $allowedMimeTypes = null;
-    private $forbiddenMimeTypes = null;
+
 
     public function __construct($name)
     {
@@ -75,75 +72,15 @@ class Upload extends Element
         return $this;
     }
 
-    /**
-     * @param int $maxFiles Max number of uploaded files
-     * @return $this
-     */
-    public function setMaxFiles($maxFiles = 1)
-    {
-        $this->maxFiles = $maxFiles;
-        return $this;
-    }
-
-    /**
-     * @param string $minFileSize Min allowed file size
-     * @return $this
-     */
-    public function setMinFileSize($minFileSize = '')
-    {
-        $this->minFileSize = $minFileSize;
-        return $this;
-    }
-
-    /**
-     * @param string $maxFileSize Max allowed file size
-     * @return $this
-     */
-    public function maxFileSize($maxFileSize = '10MB')
-    {
-        $this->maxFileSize = $maxFileSize;
-        return $this;
-    }
-
-    /**
-     * @param array $allowedExtensions Array of allowed extensions
-     * @return $this
-     */
-    public function setAllowedExtensions(array $allowedExtensions = [])
-    {
-        $this->allowedExtensions = $allowedExtensions;
-        return $this;
-    }
-
-    /**
-     * @param array $forbiddenExtensions Array of forbidden extensions
-     * @return $this
-     */
-    public function setForbiddenExtensions(array $forbiddenExtensions = [])
-    {
-        $this->forbiddenExtensions = $forbiddenExtensions;
-        return $this;
-    }
-
-    /**
-     * @param array $allowedMimeTypes Array of allowed mime types
-     * @return $this
-     */
-    public function setAllowedMimeTypes(array $allowedMimeTypes = [])
-    {
-        $this->allowedMimeTypes = $allowedMimeTypes;
-        return $this;
-    }
-
-    public function setForbiddenMimeTypes(array $forbiddenMimeTypes = [])
-    {
-        $this->forbiddenMimeTypes = $forbiddenMimeTypes;
-        return $this;
-    }
-
     public function render($attributes = array())
     {
+        $attributes = $this->getAttributes();
         $fileElement = new Element\File($this->name);
+
+        foreach ($attributes as $name => $value) {
+            $fileElement->setAttribute('data-' . $name, $value);
+        }
+
         $fileElement->setAttribute('vegas-cmf', 'upload');
         $fileElement->setAttribute('max-files', $this->maxFiles);
         $fileElement->setAttribute('upload-url', $this->uploadUrl);
