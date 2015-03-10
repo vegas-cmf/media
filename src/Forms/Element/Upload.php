@@ -5,7 +5,7 @@
  * @author Adrian Malik <adrian.malik.89@gmail.com>
  * @copyright Amsterdam Standard Sp. Z o.o.
  * @homepage https://bitbucket.org/amsdard/vegas-phalcon
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -33,7 +33,6 @@ class Upload extends Element
     public function __construct($name)
     {
         $this->name = $name;
-
         $this->maxFiles = 1;
         $this->uploadUrl = '/upload';
         $this->minFileSize = '1B';
@@ -46,54 +45,90 @@ class Upload extends Element
         $this->forbiddenMimeTypes = [];
     }
 
+    /**
+     * @param string $uploadUrl Url where uploaded file will be sent
+     * @return $this
+     */
     public function setUploadUrl($uploadUrl = '/upload')
     {
         $this->uploadUrl = $uploadUrl;
         return $this;
     }
 
+    /**
+     * @param string $browserLabel Label on button or drop zone which tells you to select file
+     * @return $this
+     */
     public function setBrowserLabel($browserLabel = 'Select file')
     {
         $this->browserLabel = $browserLabel;
         return $this;
     }
 
+    /**
+     * @param string $browserType It can be button or drop zone (drag & drop)
+     * @return $this
+     */
     public function setBrowserType($browserType = self::BROWSER_BUTTON)
     {
         $this->browserType = $browserType;
         return $this;
     }
 
+    /**
+     * @param int $maxFiles Max number of uploaded files
+     * @return $this
+     */
     public function setMaxFiles($maxFiles = 1)
     {
         $this->maxFiles = $maxFiles;
         return $this;
     }
 
-    public function setMinFileSize($minFileSize = '1B')
+    /**
+     * @param string $minFileSize Min allowed file size
+     * @return $this
+     */
+    public function setMinFileSize($minFileSize = '')
     {
         $this->minFileSize = $minFileSize;
         return $this;
     }
 
+    /**
+     * @param string $maxFileSize Max allowed file size
+     * @return $this
+     */
     public function maxFileSize($maxFileSize = '10MB')
     {
         $this->maxFileSize = $maxFileSize;
         return $this;
     }
 
+    /**
+     * @param array $allowedExtensions Array of allowed extensions
+     * @return $this
+     */
     public function setAllowedExtensions(array $allowedExtensions = [])
     {
         $this->allowedExtensions = $allowedExtensions;
         return $this;
     }
 
+    /**
+     * @param array $forbiddenExtensions Array of forbidden extensions
+     * @return $this
+     */
     public function setForbiddenExtensions(array $forbiddenExtensions = [])
     {
         $this->forbiddenExtensions = $forbiddenExtensions;
         return $this;
     }
 
+    /**
+     * @param array $allowedMimeTypes Array of allowed mime types
+     * @return $this
+     */
     public function setAllowedMimeTypes(array $allowedMimeTypes = [])
     {
         $this->allowedMimeTypes = $allowedMimeTypes;

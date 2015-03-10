@@ -725,8 +725,12 @@ $(document).ready(function() {
         var uploadUrl = $(this).attr('upload-url');
         var browserLabel = $(this).attr('browser-label');
         var browserType = $(this).attr('browser-type');
-        var minFileSize = $(this).attr('min-file-size');
         var maxFileSize = $(this).attr('max-file-size');
+
+        var minFileSize = null;
+        if ($(this).attr('min-file-size')) {
+            minFileSize = $(this).attr('min-file-size');
+        }
 
         var allowedExtensions = [];
         if ($(this).attr('allowed-extensions')) {
