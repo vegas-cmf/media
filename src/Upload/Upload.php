@@ -29,9 +29,9 @@ trait Upload
         if ($this->request->hasFiles() == true) {
             $this->initializeScaffolding();
             $form = $this->scaffolding->getForm();
-            $model = $this->scaffolding->getModel();
             $name = key($_FILES);
             $uploadElement = $form->get($name);
+            $model = $uploadElement->getModel();
 
             $path = $uploadElement->getPath();
             $maxFileSize = $uploadElement->getMaxFileSize();
@@ -84,7 +84,8 @@ trait Upload
                 }
 
                 $model->name = $fileName;
-                $model->type = $fileType;
+                $model->mime_type = $fileType;
+                $model->path = $path;
                 $model->save();
 
                 $file->moveTo($path . $model->_id);

@@ -21,6 +21,7 @@ class Upload extends Element
     const BROWSER_BUTTON = 'button';
     const BROWSER_DROPZONE = 'dropzone';
 
+    private $model = null;
     private $path = null;
     private $uploadUrl = null;
     private $browserLabel = null;
@@ -44,6 +45,22 @@ class Upload extends Element
         $this->forbiddenExtensions = [];
         $this->allowedMimeTypes = [];
         $this->forbiddenMimeTypes = [];
+    }
+
+    /**
+     * @param $model
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModel()
+    {
+        return $this->model;
     }
 
     /**
