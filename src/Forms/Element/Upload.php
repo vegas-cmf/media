@@ -21,6 +21,7 @@ class Upload extends Element
     const BROWSER_BUTTON = 'button';
     const BROWSER_DROPZONE = 'dropzone';
 
+    private $path = null;
     private $uploadUrl = null;
     private $browserLabel = null;
     private $browserType = null;
@@ -29,6 +30,9 @@ class Upload extends Element
 
     public function __construct($name)
     {
+        parent::__construct($name);
+
+        $this->path = 'files/';
         $this->name = $name;
         $this->maxFiles = 1;
         $this->uploadUrl = '/upload';
@@ -40,6 +44,24 @@ class Upload extends Element
         $this->forbiddenExtensions = [];
         $this->allowedMimeTypes = [];
         $this->forbiddenMimeTypes = [];
+    }
+
+    /**
+     * @param string $path
+     * @return $this
+     */
+    public function setPath($path = 'files/')
+    {
+        $this->path = $path;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
     }
 
     /**

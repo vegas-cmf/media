@@ -2,19 +2,19 @@
 /**
  * This file is part of Vegas package
  *
- * @author Arkadiusz Ostrycharz <arkadiusz.ostrycharz@gmail.com>
+ * @author Adrian Malik <adrian.malik.89@gmail.com>
  * @copyright Amsterdam Standard Sp. Z o.o.
  * @homepage https://bitbucket.org/amsdard/vegas-phalcon
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Vegas\Mvc\Controller\Crud\Exception;
 
-use Vegas\Mvc\Controller\Exception as Exception;
+namespace Vegas\Upload;
 
-class UploaderNotSetException extends Exception
+use Vegas\Exception as VegasException;
+
+class Exception extends VegasException
 {
-    protected $message = "There is no uploader service in dependency injection.";
+    protected $message = 'Upload Exception';
 }
- 
