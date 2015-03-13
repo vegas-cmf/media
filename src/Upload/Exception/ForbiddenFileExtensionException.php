@@ -10,11 +10,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Vegas\Media\Uploader\Exception;
+namespace Vegas\Upload\Exception;
 
-use Vegas\Media\Uploader\Exception as VegasMediaUploaderException;
+use Vegas\Upload\Exception as VegasException;
 
-class InvalidMaxSizeException extends VegasMediaUploaderException
+class ForbiddenFileExtensionException extends VegasException
 {
-    protected $message = 'Invalid max file size';
+    protected $message = 'Forbidden extension';
 }

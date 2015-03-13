@@ -10,11 +10,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Vegas\Media\Uploader\Exception;
+namespace Vegas\Upload;
 
-use Vegas\Media\Uploader\Exception as VegasMediaUploaderException;
+use Vegas\Exception as VegasException;
 
-class InvalidUploadedFileExtensionException extends VegasMediaUploaderException
+class Exception extends VegasException
 {
-    protected $message = 'Uploaded file does not have allowed extension';
+    protected $message = 'Upload Exception';
 }

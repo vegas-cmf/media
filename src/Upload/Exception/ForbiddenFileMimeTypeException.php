@@ -10,11 +10,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Vegas\Media\Uploader\Exception;
+namespace Vegas\Upload\Exception;
 
-use Vegas\Media\Uploader\Exception as VegasMediaUploaderException;
+use Vegas\Upload\Exception as VegasException;
 
-class NoFilesException extends VegasMediaUploaderException
+class ForbiddenFileMimeTypeException extends VegasException
 {
-    protected $message = 'No files in uploader set';
+    protected $message = 'Forbidden mime type';
 }
