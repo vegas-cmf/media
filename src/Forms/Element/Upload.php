@@ -92,6 +92,14 @@ class Upload extends Element
     }
 
     /**
+     * @return string
+     */
+    public function getUploadUrl()
+    {
+        return $this->uploadUrl;
+    }
+
+    /**
      * @param string $browserLabel Label on button or drop zone which tells you to select file
      * @return $this
      */
@@ -102,6 +110,14 @@ class Upload extends Element
     }
 
     /**
+     * @return string
+     */
+    public function getBrowserLabel()
+    {
+        return $this->browserLabel;
+    }
+
+    /**
      * @param string $browserType It can be button or drop zone (drag & drop)
      * @return $this
      */
@@ -109,6 +125,11 @@ class Upload extends Element
     {
         $this->browserType = $browserType;
         return $this;
+    }
+
+    public function getBrowserType()
+    {
+        return $this->browserType;
     }
 
     public function render($attributes = array())
