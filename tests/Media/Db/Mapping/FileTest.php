@@ -9,7 +9,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Vegas\Db\Mapping;
 
 use Vegas\Db\Decorator\CollectionAbstract;
@@ -98,4 +98,4 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $foo->readMapped('image'));
     }
 
-} 
+}
