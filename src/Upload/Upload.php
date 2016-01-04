@@ -43,26 +43,30 @@ trait Upload
                 $fileType = $file->getRealType();
                 $fileExtensions = pathinfo($fileName, PATHINFO_EXTENSION);
 
-                if (!empty($uploadElement->getAllowedExtensions())) {
-                    if (!in_array($fileExtensions, $uploadElement->getAllowedExtensions())) {
+                $allowed = $uploadElement->getAllowedExtensions();
+                if (!empty($allowed)) {
+                    if (!in_array($fileExtensions, $allowed)) {
                         throw new ForbiddenFileExtensionException();
                     }
                 }
 
-                if (!empty($uploadElement->getForbiddenExtensions())) {
-                    if (in_array($fileExtensions, $uploadElement->getForbiddenExtensions())) {
+                $forbidden = $uploadElement->getForbiddenExtensions();
+                if (!empty($forbidden)) {
+                    if (in_array($fileExtensions, $forbidden)) {
                         throw new ForbiddenFileExtensionException();
                     }
                 }
 
-                if (!empty($uploadElement->getAllowedMimeTypes())) {
-                    if (!in_array($fileType, $uploadElement->getAllowedMimeTypes())) {
+                $allowedMime = $uploadElement->getAllowedMimeTypes();
+                if (!empty($allowedMime)) {
+                    if (!in_array($fileType, $allowedMime)) {
                         throw new ForbiddenFileMimeTypeException();
                     }
                 }
 
-                if (!empty($uploadElement->getForbiddenMimeTypes())) {
-                    if (in_array($fileType, $uploadElement->getForbiddenMimeTypes())) {
+                $forbiddenMime = $uploadElement->getForbiddenMimeTypes();
+                if (!empty($forbiddenMime)) {
+                    if (in_array($fileType, $forbiddenMime)) {
                         throw new ForbiddenFileMimeTypeException();
                     }
                 }
