@@ -9,28 +9,15 @@
             "email": "vegas@amsterdam-standard.pl"
         }
     ],
-    "repositories": [
-        {
-            "type" : "git",
-            "url" : "https://github.com/phalcon/phalcon-devtools.git"
-        },
-        {
-            "type" : "git",
-            "url" : "https://github.com/spekkionu/wideimage.git"
-        },
-        {
-            "type" : "git",
-            "url" : "https://github.com/arius86/core.git"
-        }
-    ],
+    "repositories": [],
     "require": {
         "php": ">=5.4",
         "ext-phalcon": ">=1.3.0,<2",
+        "ext-imagick": "*",
         "phalcon/devtools": "1.3.x-dev",
         "phalcon/incubator": "1.3.*",
         "vegas-cmf/core" : "1.1.*",
-        "vegas-cmf/forms" : "1.1.*",
-        "spekkionu/wideimage" : "dev-master"
+        "vegas-cmf/forms" : "1.1.*"
     },
     "require-dev": {
         "phpunit/phpunit": "4.0.*",

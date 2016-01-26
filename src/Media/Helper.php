@@ -12,10 +12,8 @@
 
 namespace Vegas\Media;
 
-use Vegas\Media\Model\File as FileModel;
 use Vegas\Media\File\Exception as FileException;
-use Vegas\Media\Uploader\Exception\CannotSaveFileInHardDriveException;
-use WideImage;
+use Vegas\Upload\Exception\CannotSaveFileInHardDriveException;
 
 class Helper
 {
@@ -47,7 +45,7 @@ class Helper
     /**
      * Move file from the temporary destination to the original destination
      *
-     * @param FileModel $file
+     * @param \stdClass $file
      * @throws File\Exception
      */
     public static final function moveFile($file)
@@ -89,13 +87,13 @@ class Helper
      * Generates a thumbnails of the images in the following location:
      * {ORIGINAL_DESTINATION_OF_THE_FILE}/thumbnails/filename.{ext}
      *
-     * @param FileModel $file
+     * @param \stdClass $file
      * @param array $size The resize parameters  (width, height, fit)
      * @param array $crop The cropping parameters (left, top)
      */
     public static final function generateThumbnail(
             $file, 
-            array $size = array('width' => 168, 'height' => 120, 'fit' => 'outside'), 
+            array $size = array('width' => 168, 'height' => 120, 'fit' => 'outside'),
             array $crop = array('left' => 'center', 'top' => 'middle')
     ) {
         if(!empty($file->original_destination) && isset($size['width']) && isset($size['height'])) {
@@ -103,7 +101,7 @@ class Helper
             // ie. string(47) "/var/www/vegas/public/uploads/5326acd311dd4.jpg"
             $filePath = $file->original_destination . '/' . $file->temp_name;
 
-            if (!file_exists($file->original_destination . '/thumbnails')) {
+            if (!is_dir($file->original_destination . '/thumbnails')) {
                 mkdir($file->original_destination . '/thumbnails', 0777, true);
             }
             
@@ -119,11 +117,18 @@ class Helper
             if(!isset($crop['top'])) {
                 $crop['top'] = 'middle';
             }
-            
-            WideImage::load($filePath)
-                        ->resize($size['width'], $size['height'], $size['fit'])
-                        ->crop($crop['left'], $crop['top'], $size['width'], $size['height'])
-                        ->saveToFile($file->original_destination . '/thumbnails/' . $size['width'] . '_' . $size['height'] . '_' . $file->temp_name);
+
+            // Use default output quality when not provided
+            if (!isset($size['quality'])) {
+                $size['quality'] = null;
+            }
+
+            $thumbFilePath = $file->original_destination . '/thumbnails/' . $size['width'] . '_' . $size['height'] . '_' . $file->temp_name;
+
+            (new Adapter\Imagick($filePath))
+                ->resize($size['width'], $size['height'], $size['fit'])
+                ->crop($size['width'], $size['height'], $crop['left'], $crop['top'])
+                ->save($thumbFilePath, $size['quality']);
         }
     }
 }
