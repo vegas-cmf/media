@@ -8,11 +8,12 @@ services:
   - memcached
 
 before_script:
+  - printf "\n" | pecl install imagick
   - phpenv config-add travis/php.ini
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b 1.3.5
   - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall"; phpize && ./configure --enable-phalcon && make -j4 && sudo make install && phpenv config-add ../unit-tests/ci/phalcon.ini)
   - curl -s http://getcomposer.org/installer | php
-  - php composer.phar install --dev
+  - php composer.phar install
 
 script:
   - mkdir -p tests/fixtures/cache
