@@ -17,6 +17,6 @@
   "dependencies": {
     "jquery-uploader": "https://github.com/adrianmalik/jquery-uploader.git",
     "handlebars": "2.0.*",
-    "alertify": "*"
+    "alertify.js": "0.3.11"
   }
 }
