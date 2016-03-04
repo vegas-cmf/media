@@ -6,14 +6,13 @@
   },
   "exportsOverride": {
     "alertify.js": {
-      "js": "lib/*.js",
-      "css": "themes/*.css"
+      ".": ["lib/*.js", "themes/*.css"]
     },
     "handlebars": {
-      "js": "*.js"
+      ".": "*.js"
     },
     "jquery-uploader": {
-      "js": "*.js"
+      ".": "*.js"
     }
   }
 
