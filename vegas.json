@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "alertify.js": "0.3.11",
+    "handlebars": "2.0.0",
+    "jquery-uploader": "git://github.com/adrianmalik/jquery-uploader.git#aa9574f350f0921898a72d7cf197f36f6531812a"
+  },
+  "exportsOverride": {
+    "alertify.js": {
+      ".": ["lib/*.js", "themes/*.css"]
+    },
+    "handlebars": {
+      ".": "*.js"
+    },
+    "jquery-uploader": {
+      ".": "*.js"
+    }
+  }
+
+}
