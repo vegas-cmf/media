@@ -19,7 +19,7 @@ use Phalcon\Image;
  * Provides compatibility for Vegas Media library users updating from older version due to WideImage replacement.
  * @package Vegas\Media\Adapter
  */
-class Imagick extends \Phalcon\Image\Adapter\Imagick
+class Imagick extends Image\Adapter\Imagick
 {
     /**
      * {@inheritdoc}

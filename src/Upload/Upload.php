@@ -13,6 +13,7 @@
 
 namespace Vegas\Upload;
 
+use Vegas\Mvc\View;
 use Vegas\Upload\Exception\ForbiddenFileExtensionException;
 use Vegas\Upload\Exception\ForbiddenFileMimeTypeException;
 
@@ -30,6 +31,7 @@ trait Upload
             $this->initializeScaffolding();
             $form = $this->scaffolding->getForm();
             $name = key($_FILES);
+            /** @var \Vegas\Forms\Element\Upload $uploadElement */
             $uploadElement = $form->get($name);
             $model = $uploadElement->getModel();
 

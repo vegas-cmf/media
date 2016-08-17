@@ -33,7 +33,7 @@ class Helper
      *          "updated_at": NumberInt(1394171751)
      *      }
      *
-     * @param array|ArrayObject $files
+     * @param \Vegas\Media\File\Decorator[] $files
      */
     public static final function moveFilesFrom($files)
     {
@@ -73,7 +73,7 @@ class Helper
     /**
      * Generates a thumbnails of the files associated with the record
      *
-     * @param array|ArrayObject $files
+     * @param \Vegas\Media\File\Decorator[] $files
      * @param array $size
      */
     public static final function generateThumbnailsFrom($files, array $size)

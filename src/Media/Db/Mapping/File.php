@@ -15,7 +15,6 @@ namespace Vegas\Media\Db\Mapping;
 use Vegas\Db\MappingInterface;
 use Vegas\Media\Db\FileInterface;
 use Vegas\Media\File\Decorator;
-use Vegas\Media\File\Exception;
 
 /**
  * Class File
