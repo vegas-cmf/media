@@ -1,7 +1,7 @@
 <?php
 
 use Phalcon\DiInterface;
-use Vegas\DI\ServiceProviderInterface;
+use Vegas\Di\ServiceProviderInterface;
 use Vegas\Media\Uploader as Uploader;
 
 class UploaderServiceProvider implements ServiceProviderInterface
