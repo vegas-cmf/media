@@ -12,43 +12,77 @@ $_SERVER['HTTP_HOST'] = 'vegas.dev';
 $_SERVER['REQUEST_URI'] = '/';
 
 $config = new \Phalcon\Config($configArray);
-$di = new Phalcon\DI\FactoryDefault();
 
+// \Phalcon\Mvc\Collection requires non-static binding of service providers.
+class DiProvider
+{
 
-$di->set('config', $config);
-$di->set('collectionManager', function() use ($di) {
-    return new \Phalcon\Mvc\Collection\Manager();
-}, true);
+    public function resolve(\Phalcon\Config $config)
+    {
+        $di = new \Phalcon\Di\FactoryDefault();
 
-$di->set('collectionManager', function() {
-    return new \Phalcon\Mvc\Collection\Manager();
-});
+        $di->set('config', $config);
 
-$view = new \Phalcon\Mvc\View();
-$view->registerEngines(array(
-    '.volt' => function ($this, $di) {
-        $volt = new \Phalcon\Mvc\View\Engine\Volt($this, $di);
-        $volt->setOptions(array(
-            'compiledPath' => TESTS_ROOT_DIR.'/fixtures/cache/',
-            'compiledSeparator' => '_'
+        $di->set('collectionManager', function() {
+            return new \Phalcon\Mvc\Collection\Manager();
+        }, true);
+
+        $di->set('mongo', function() use ($config) {
+            $mongoConfig = $config->mongo->toArray();
+
+            if (isset($mongoConfig['dsn'])) {
+                $hostname = $mongoConfig['dsn'];
+                unset($mongoConfig['dsn']);
+            } else {
+                //obtains hostname
+                if (isset($mongoConfig['host'])) {
+                    $hostname = 'mongodb://' . $mongoConfig['host'];
+                } else {
+                    $hostname = 'mongodb://localhost';
+                }
+                if (isset($mongoConfig['port'])) {
+                    $hostname .= ':' . $mongoConfig['port'];
+                }
+                //removes options that are not allowed in MongoClient constructor
+                unset($mongoConfig['host']);
+                unset($mongoConfig['port']);
+            }
+            $dbName = $mongoConfig['dbname'];
+            unset($mongoConfig['dbname']);
+
+            $mongo = new \MongoClient($hostname, $mongoConfig);
+            return $mongo->selectDb($dbName);
+        }, true);
+
+        $di->set('modelManager', function() {
+            return new \Phalcon\Mvc\Model\Manager();
+        }, true);
+
+        $di->set('db', function() use ($config) {
+            return new \Phalcon\Db\Adapter\Pdo\Mysql($config->db->toArray());
+        }, true);
+
+        $view = new \Phalcon\Mvc\View();
+        $view->registerEngines(array(
+            '.volt' => function ($view, $di) {
+                $volt = new \Phalcon\Mvc\View\Engine\Volt($view, $di);
+                $volt->setOptions(array(
+                    'compiledPath' => TESTS_ROOT_DIR.'/fixtures/cache/',
+                    'compiledSeparator' => '_'
+                ));
+
+                return $volt;
+            },
+            '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
         ));
 
-        return $volt;
-    },
-    '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
-));
+        $di->set('view', $view);
 
-$di->set('view', $view);
+        $di->set('filter', '\Vegas\Filter', true);
 
-$di->set('mongo', function() use ($config) {
-    $mongo = new \MongoClient();
-    return $mongo->selectDb($config->mongo->db);
-}, true);
-$di->set('modelManager', function() use ($di) {
-    return new \Phalcon\Mvc\Model\Manager();
-}, true);
-$di->set('db', function() use ($config) {
-    return new \Phalcon\Db\Adapter\Pdo\Mysql($config->db->toArray());
-}, true);
+        \Phalcon\Di::setDefault($di);
+    }
 
-Phalcon\DI::setDefault($di);
+}
+
+(new \DiProvider)->resolve($config);

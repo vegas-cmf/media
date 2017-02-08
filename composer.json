@@ -11,17 +11,17 @@
     ],
     "repositories": [],
     "require": {
-        "php": ">=5.4",
-        "ext-phalcon": ">=1.3.0,<2",
+        "php": "^5.5 || ^7.0",
+        "ext-phalcon": "^3.0",
         "ext-imagick": "*",
-        "phalcon/devtools": "1.3.x-dev",
-        "phalcon/incubator": "1.3.*",
-        "vegas-cmf/core" : "1.1.*",
-        "vegas-cmf/forms" : "1.1.*"
+        "phalcon/incubator": "^3.0",
+        "vegas-cmf/core" : "3.0.x-dev",
+        "vegas-cmf/forms" : "3.0.x-dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.0.*",
-        "satooshi/php-coveralls": "1.0.1"
+        "phalcon/devtools": "^3.0",
+        "phpunit/phpunit": "4.* || 5.*",
+        "satooshi/php-coveralls": "^1.0"
     },
     "autoload": {
         "psr-4": {
